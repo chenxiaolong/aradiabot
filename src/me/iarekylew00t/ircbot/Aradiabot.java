@@ -33,7 +33,7 @@ public enum Aradiabot {
 			throw new UnsupportedOperationException("Cannot redefine singleton IRCBot");
 		}
 		BOT = bot;
-		bot.getLogger().info("This bot is running " + getName() + " version " + getVersion() + " (Implementing PircBotX API version " + getAPIVersion() + ")");
+		bot.getLogger().info("This bot is running " + getName() + " version " + getVersion() + " (PircBotX API version " + getAPIVersion() + ")");
 	}
 	
 	public static String getName() {
@@ -52,8 +52,12 @@ public enum Aradiabot {
 		return BOT.getBotId();
 	}
 	
-	public static boolean debug() {
-		return BOT.debug();
+	public static boolean isDebugging() {
+		return BOT.isDebugging();
+	}
+	
+	public static void setDebug(boolean val) {
+		BOT.setDebug(val);
 	}
 	
 	public static Collection<? extends User> getAllUsers() {

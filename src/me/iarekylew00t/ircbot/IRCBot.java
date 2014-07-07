@@ -1,9 +1,9 @@
 package me.iarekylew00t.ircbot;
 
-import me.iarekylew00t.ircbot.hooks.PluginBase;
 import me.iarekylew00t.ircbot.listeners.CommandListener;
 import me.iarekylew00t.ircbot.listeners.InternalCommandListener;
 import me.iarekylew00t.ircbot.plugin.IRCPlugin;
+import me.iarekylew00t.ircbot.plugin.PluginBase;
 import me.iarekylew00t.ircbot.plugin.PluginList;
 
 import org.pircbotx.Channel;
@@ -32,17 +32,8 @@ public class IRCBot extends PircBotX {
 	public IRCBot(Configuration<IRCBot> configuration) {
 		super(configuration);
 		Aradiabot.setBot(this);
-		this.getConfiguration().getListenerManager().addListener(new CommandListener());
-		this.getConfiguration().getListenerManager().addListener(new InternalCommandListener());
 		this.addPlugin(new CommandListener());
-	}
-	
-	public void setDebug(boolean debug) {
-		this.DEBUG = debug;
-	}
-	
-	public boolean debug() {
-		return this.DEBUG;
+		this.addPlugin(new InternalCommandListener());
 	}
 	
 	public void addPlugin(PluginBase pl) {
@@ -156,9 +147,23 @@ public class IRCBot extends PircBotX {
 			}
 			this.getConfiguration().getListenerManager().removeListener(pl);
 		}
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			this.LOG.error("Error shutting down Aradiabot. Thread interrupted");
+		}
 		this.stopBotReconnect();
 		this.shutdown(true);
 		System.exit(0);
+	}
+	
+	public void setDebug(boolean debug) {
+		this.DEBUG = debug;
+	}
+	
+	public boolean isDebugging() {
+		return this.DEBUG;
 	}
 	
 	public String getName() {
