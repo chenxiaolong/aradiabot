@@ -6,7 +6,6 @@ import java.util.List;
 import me.iarekylew00t.ircbot.Aradiabot;
 import me.iarekylew00t.ircbot.command.Command;
 import me.iarekylew00t.ircbot.command.CommandList;
-import me.iarekylew00t.ircbot.hooks.PluginBase;
 
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +23,6 @@ import ch.qos.logback.core.FileAppender;
  */
 public abstract class IRCPlugin extends PluginBase implements Comparable {
 	private final String NAME, VER;
-	private boolean ENABLED;
 	private List<Command> CMDS;
 	private Logger LOG;
 	
@@ -59,7 +57,7 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 		LOG = (Logger) LoggerFactory.getLogger(this.NAME);
 		LOG.addAppender(ca);
 		LOG.addAppender(fa);
-		if (Aradiabot.debug()) {
+		if (Aradiabot.isDebugging()) {
 			LOG.setLevel(Level.DEBUG);
 		} else {
 			LOG.setLevel(Level.INFO);
@@ -67,15 +65,13 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 		LOG.setAdditive(false);
 
 		LOG.info("Enabling " + this.NAME + " v" + this.VER);
+		PluginList.add(this);
 		if (this.onEnable()) {
-			this.ENABLED = true;
-			PluginList.add(this);
+			this.setEnabled(true);
 		} else {
 			LOG.error("Disabling "+ this.NAME + " v" + this.VER + "; Error occured.");
 			this.onDisable();
-			this.ENABLED = false;
-			PluginList.remove(this);
-			Aradiabot.getBot().removePlugin(this);
+			this.setEnabled(false);
 		}
 	}
 	
@@ -120,10 +116,6 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 	
 	public List<Command> getCommands() {
 		return this.CMDS;
-	}
-	
-	public boolean isEnabled() {
-		return this.ENABLED;
 	}
 	
 	public Logger getLogger() {

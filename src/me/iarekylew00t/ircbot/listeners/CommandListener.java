@@ -2,8 +2,8 @@ package me.iarekylew00t.ircbot.listeners;
 
 import me.iarekylew00t.ircbot.command.Command;
 import me.iarekylew00t.ircbot.command.CommandList;
-import me.iarekylew00t.ircbot.hooks.PluginBase;
 import me.iarekylew00t.ircbot.hooks.events.CommandEvent;
+import me.iarekylew00t.ircbot.plugin.PluginBase;
 
 import org.pircbotx.Utils;
 import org.pircbotx.hooks.events.MessageEvent;
@@ -22,6 +22,7 @@ public class CommandListener extends PluginBase {
 	public void onMessage(MessageEvent e) throws Exception {
 		String messageRaw = e.getMessage();
 		if (messageRaw.startsWith("$")) {
+			if (messageRaw.equals("$")) { return; }
 			String[] arr = messageRaw.split(" ", 2);
 			String cmd = arr[0].substring(1);
 			LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME).info(e.getUser().getNick() + " issused command: " + cmd);
@@ -33,8 +34,6 @@ public class CommandListener extends PluginBase {
 				} else {
 					Utils.dispatchEvent(e.getBot(), new CommandEvent(e, e.getUser(), e.getChannel(), command, arr[1].split(" ")));
 				}
-			} else {
-				e.respond(cmd + " is not a valid command.");
 			}
 		}
 	}
