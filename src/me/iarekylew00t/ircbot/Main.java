@@ -18,12 +18,11 @@ import me.iarekylew00t.utils.FileConfiguration;
 
 /**
  * Main class for the Aradiabot. Modify any initial settings here.
- * 
  * @author Kyle Colantonio <IAreKyleW00t kyle10468@gmail.com>
  */
-public class AradiabotMain {
+public class Main {
 	private static FileConfiguration CONFIG = new FileConfiguration("CONFIG.ini");
-	private static Logger LOG = (Logger) LoggerFactory.getLogger(AradiabotMain.class);
+	private static Logger LOG = (Logger) LoggerFactory.getLogger(Main.class);
 	
 	public static void main(String[] args) {
 		init();
@@ -36,14 +35,15 @@ public class AradiabotMain {
 			CONFIG.set("port", "6667");
 			CONFIG.set("serverPassword", "");
 			CONFIG.set("channels", "");
+			CONFIG.set("charset", "UTF-8");
 			CONFIG.set("debug", "false");
 			CONFIG.save();
-			LOG.warn("First time load detected. Please edit \"CONFIG.ini\" and restart the bot. (Exit code: 1)");
+			LOG.warn("First time load detected. Please edit \"config.ini\" and restart the bot. (Exit code: 1)");
 			System.exit(1);
 			return;
 		}
 		Configuration<IRCBot> botConfig = new Configuration.Builder<IRCBot>()
-			.setEncoding(Charset.forName("UTF-8"))
+			.setEncoding(Charset.forName(CONFIG.get("charset", "UTF-8")))
 			.setAutoNickChange(true)
 			.setAutoReconnect(true)
 			.setMessageDelay(0)
@@ -54,7 +54,7 @@ public class AradiabotMain {
 			.addAutoJoinChannel(CONFIG.get("channels"))
 			.buildConfiguration();
 		IRCBot bot = new IRCBot(botConfig);
-		bot.setDebug(Boolean.parseBoolean(CONFIG.get("debug", "true")));
+		bot.setDebug(Boolean.parseBoolean(CONFIG.get("debug", "false")));
 		/* Load all plugins here */
 		try {
 			bot.startBot();
@@ -97,8 +97,9 @@ public class AradiabotMain {
 		
 		root.addAppender(cAppender);
 		root.addAppender(fAppender);
-		if (Boolean.parseBoolean(CONFIG.get("debug", "true"))) {
+		if (Boolean.parseBoolean(CONFIG.get("debug", "false"))) {
 			root.setLevel(Level.DEBUG);
+			root.debug("===== DEBUGGING MODE ENABLED =====");
 		} else {
 			root.setLevel(Level.INFO);
 		}

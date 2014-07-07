@@ -1,9 +1,8 @@
-package me.iarekylew00t.ircbot.hooks;
+package me.iarekylew00t.ircbot.plugin;
 
 import me.iarekylew00t.ircbot.command.Command;
 import me.iarekylew00t.ircbot.hooks.events.CommandEvent;
 import me.iarekylew00t.ircbot.hooks.types.GenericCommandEvent;
-import me.iarekylew00t.ircbot.plugin.IRCPlugin;
 
 import org.pircbotx.Channel;
 import org.pircbotx.PircBotX;
@@ -32,7 +31,18 @@ import org.pircbotx.hooks.types.GenericUserModeEvent;
  * @author Kyle Colantonio <IAreKyleW00t kyle10468@gmail.com>
  **/
 public abstract class PluginBase<T extends PircBotX> implements Listener<T> {
+	private boolean ENABLED = true;
+	
+	public boolean isEnabled() {
+		return this.ENABLED;
+	}
+	
+	public void setEnabled(boolean val) {
+		this.ENABLED = val;
+	}
+	
 	public void onEvent(Event<T> event) throws Exception {
+		if (!this.ENABLED) { return; }
 		if (event instanceof ActionEvent) {
 			onAction((ActionEvent<T>) event);
 		} else if (event instanceof ChannelInfoEvent) {
