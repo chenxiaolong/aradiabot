@@ -33,7 +33,7 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 		init();
 	}
 	
-	public void init() {
+	private void init() {
 		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 		PatternLayoutEncoder ple = new PatternLayoutEncoder();
 		
@@ -75,6 +75,24 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 		}
 	}
 	
+	/**
+	 * Called when the plugin is enabled. Returns true
+	 * if no errors occur. False will indicate a problem and disable the plugin.
+	 * @return
+	 */
+	public boolean onEnable() {
+		return true;
+	}
+	
+	/**
+	 * Called when the plugin is disabled. Returns true
+	 * if no errors occur. False will indicate a problem.
+	 * @return
+	 */
+	public boolean onDisable() {
+		return true;
+	}
+	
 	public void addCommand(String name, String desc, String usage, List<String> aliases, int perm) {
 		Command cmd = new Command(name, desc, usage, aliases, perm);
 		CommandList.add(cmd);
@@ -96,14 +114,6 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 	public void addCommand(Command cmd) {
 		CommandList.add(cmd);
 		this.CMDS.add(cmd);
-	}
-	
-	public boolean onEnable() {
-		return true;
-	}
-
-	public boolean onDisable() {
-		return true;
 	}
 	
 	public String getName() {
