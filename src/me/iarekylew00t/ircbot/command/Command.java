@@ -3,7 +3,7 @@ package me.iarekylew00t.ircbot.command;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.iarekylew00t.ircbot.utils.IRC;
+import me.iarekylew00t.ircbot.IRC;
 
 /**
  * Creates and holds all command information including: name,

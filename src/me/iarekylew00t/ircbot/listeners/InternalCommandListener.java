@@ -10,11 +10,11 @@ import org.pircbotx.Colors;
 import org.pircbotx.User;
 
 import me.iarekylew00t.ircbot.Aradiabot;
+import me.iarekylew00t.ircbot.IRC;
 import me.iarekylew00t.ircbot.command.Command;
 import me.iarekylew00t.ircbot.command.CommandList;
 import me.iarekylew00t.ircbot.plugin.IRCPlugin;
 import me.iarekylew00t.ircbot.plugin.PluginBase;
-import me.iarekylew00t.ircbot.utils.IRC;
 import me.iarekylew00t.utils.ListUtils;
 
 /**

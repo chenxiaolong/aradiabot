@@ -1,4 +1,4 @@
-package me.iarekylew00t.ircbot.utils;
+package me.iarekylew00t.ircbot;
 
 import org.pircbotx.Channel;
 import org.pircbotx.User;
