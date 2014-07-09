@@ -1,5 +1,6 @@
 package me.iarekylew00t.ircbot;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import me.iarekylew00t.ircbot.plugin.PluginList;
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 import org.pircbotx.UserLevel;
+
 import com.google.common.collect.ImmutableSortedSet;
 
 import ch.qos.logback.classic.Logger;
@@ -46,6 +48,10 @@ public enum Aradiabot {
 	
 	public static String getAPIVersion() {
 		return BOT.getAPIVersion();
+	}
+	
+	public static File getPluginDir() {
+		return BOT.getPluginDir();
 	}
 	
 	public static int getBotId() {

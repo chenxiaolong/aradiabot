@@ -1,5 +1,7 @@
 package me.iarekylew00t.ircbot;
 
+import java.io.File;
+
 import me.iarekylew00t.ircbot.listeners.CommandListener;
 import me.iarekylew00t.ircbot.listeners.InternalCommandListener;
 import me.iarekylew00t.ircbot.plugin.IRCPlugin;
@@ -26,12 +28,16 @@ public class IRCBot extends PircBotX {
 	public static final String VERSION = "2.1.0.0";
 	public static final String NAME = "Aradiabot";
 	public static final String PIRCBOTX_VERSION = "2.0.1";
+	private static final File PLUGIN_DIR = new File("./plugins");
 	private boolean DEBUG = false;
-	private Logger LOG = (Logger) LoggerFactory.getLogger(IRCBot.class);
+	private final Logger LOG = (Logger) LoggerFactory.getLogger(IRCBot.class);
 	
 	public IRCBot(Configuration<IRCBot> configuration) {
 		super(configuration);
 		Aradiabot.setBot(this);
+		if (!PLUGIN_DIR.exists()) {
+			PLUGIN_DIR.mkdir();
+		}
 		this.addPlugin(new CommandListener());
 		this.addPlugin(new InternalCommandListener());
 	}
@@ -176,6 +182,10 @@ public class IRCBot extends PircBotX {
 	
 	public String getAPIVersion() {
 		return PIRCBOTX_VERSION;
+	}
+	
+	public File getPluginDir() {
+		return PLUGIN_DIR;
 	}
 	
 	public Logger getLogger() {
