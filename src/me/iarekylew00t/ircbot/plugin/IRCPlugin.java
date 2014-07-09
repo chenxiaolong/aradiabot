@@ -23,13 +23,13 @@ import ch.qos.logback.core.FileAppender;
  */
 public abstract class IRCPlugin extends PluginBase implements Comparable {
 	private final String NAME, VER;
-	private List<Command> CMDS;
+	private final List<Command> CMDS;
 	private Logger LOG;
 	
 	public IRCPlugin(String name, String version) {
 		this.NAME = name;
 		this.VER = version;
-		CMDS = new ArrayList<Command>();
+		this.CMDS = new ArrayList<Command>();
 		init();
 	}
 	
