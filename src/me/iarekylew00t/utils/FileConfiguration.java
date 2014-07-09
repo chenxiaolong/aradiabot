@@ -9,7 +9,7 @@ import java.util.Properties;
  * Standard flatfile configuration.
  * @author Kyle Colantonio <IAreKyleW00t kyle10468@gmail.com>
  */
-public class FileConfiguration {
+public class FileConfiguration implements Configuration {
 	private File FILE;
 	private Properties PROPS = new Properties();
 	private boolean FIRST_TIME_LOAD = false;
@@ -21,7 +21,6 @@ public class FileConfiguration {
 
 	public FileConfiguration(String file) {
 		this(new File(file));
-		this.load();
 	}
 	
 	public String get(String prop) {
@@ -52,14 +51,14 @@ public class FileConfiguration {
 				this.FIRST_TIME_LOAD = true;
 			}
 			this.PROPS.load(new FileInputStream(this.FILE));
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
 	public void save() {
 		try {
-			this.PROPS.store(new FileOutputStream(this.FILE), FILE.getName() +  " Configuration File");
+			this.PROPS.store(new FileOutputStream(this.FILE), this.FILE.getName() +  " Configuration File");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
