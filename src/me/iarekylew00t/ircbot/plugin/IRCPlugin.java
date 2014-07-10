@@ -1,9 +1,11 @@
 package me.iarekylew00t.ircbot.plugin;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import me.iarekylew00t.ircbot.Aradiabot;
+import me.iarekylew00t.ircbot.IRCBot;
 import me.iarekylew00t.ircbot.command.Command;
 import me.iarekylew00t.ircbot.command.CommandList;
 
@@ -23,6 +25,7 @@ import ch.qos.logback.core.FileAppender;
  */
 public abstract class IRCPlugin extends PluginBase implements Comparable {
 	private final String NAME, VER, AUTHOR, DESC;
+	private final File PLUGIN_DIR;
 	private final List<Command> CMDS;
 	private Logger LOG;
 	
@@ -31,6 +34,7 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 		this.VER = version;
 		this.AUTHOR = author;
 		this.DESC = desc;
+		this.PLUGIN_DIR = new File(Aradiabot.getPluginDir(), name);
 		this.CMDS = new ArrayList<Command>();
 		init();
 	}
@@ -68,12 +72,19 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 
 		LOG.info("Enabling " + this.NAME + " v" + this.VER);
 		PluginList.add(this);
-		if (this.onEnable()) {
-			this.setEnabled(true);
-		} else {
+		try {
+			if (this.onEnable()) {
+				this.setEnabled(true);
+			} else {
+				LOG.error("Disabling "+ this.NAME + " v" + this.VER);
+				this.setEnabled(false);
+				this.onDisable();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 			LOG.error("Disabling "+ this.NAME + " v" + this.VER + "; Error occured.");
-			this.onDisable();
 			this.setEnabled(false);
+			this.onDisable();
 		}
 	}
 	
@@ -134,12 +145,20 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 		return this.DESC;
 	}
 	
+	public File getDataFolder() {
+		return this.PLUGIN_DIR;
+	}
+	
 	public List<Command> getCommands() {
 		return this.CMDS;
 	}
 	
 	public Logger getLogger() {
 		return this.LOG;
+	}
+	
+	public IRCBot getBot() {
+		return Aradiabot.getBot();
 	}
 	
 	@Override
