@@ -22,13 +22,15 @@ import ch.qos.logback.core.FileAppender;
  * @author Kyle Colantonio <IAreKyleW00t kyle10468@gmail.com>
  */
 public abstract class IRCPlugin extends PluginBase implements Comparable {
-	private final String NAME, VER;
+	private final String NAME, VER, AUTHOR, DESC;
 	private final List<Command> CMDS;
 	private Logger LOG;
 	
-	public IRCPlugin(String name, String version) {
+	public IRCPlugin(String name, String version, String author, String desc) {
 		this.NAME = name;
 		this.VER = version;
+		this.AUTHOR = author;
+		this.DESC = desc;
 		this.CMDS = new ArrayList<Command>();
 		init();
 	}
@@ -119,9 +121,17 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 	public String getName() {
 		return this.NAME;
 	}
-	
+
 	public String getVersion() {
 		return this.VER;
+	}
+	
+	public String getAuthor() {
+		return this.AUTHOR;
+	}
+	
+	public String getDescription() {
+		return this.DESC;
 	}
 	
 	public List<Command> getCommands() {
