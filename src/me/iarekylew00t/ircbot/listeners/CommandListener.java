@@ -1,5 +1,10 @@
 package me.iarekylew00t.ircbot.listeners;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import me.iarekylew00t.ircbot.command.Command;
 import me.iarekylew00t.ircbot.command.CommandList;
 import me.iarekylew00t.ircbot.hooks.events.CommandEvent;
@@ -21,8 +26,11 @@ public class CommandListener extends PluginBase {
 	@Override
 	public void onMessage(MessageEvent e) throws Exception {
 		String messageRaw = e.getMessage();
+		if (messageRaw.equals("$")) {
+			return;
+		}
+		
 		if (messageRaw.startsWith("$")) {
-			if (messageRaw.equals("$")) { return; }
 			String[] arr = messageRaw.split(" ", 2);
 			String cmd = arr[0].substring(1);
 			LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME).info(e.getUser().getNick() + " issused command: " + cmd);
@@ -32,7 +40,12 @@ public class CommandListener extends PluginBase {
 				if (arr.length <= 1) {
 					Utils.dispatchEvent(e.getBot(), new CommandEvent(e, e.getUser(), e.getChannel(), command, new String[0]));
 				} else {
-					Utils.dispatchEvent(e.getBot(), new CommandEvent(e, e.getUser(), e.getChannel(), command, arr[1].split(" ")));
+					List<String> args = new ArrayList<String>();
+					Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(arr[1]);
+					while (m.find()) {
+						args.add(m.group(1).replaceAll("\"", "").trim());
+					}
+					Utils.dispatchEvent(e.getBot(), new CommandEvent(e, e.getUser(), e.getChannel(), command, args.toArray(new String[args.size()])));
 				}
 			}
 		}
