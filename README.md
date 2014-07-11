@@ -1,5 +1,5 @@
-MinecraftQuery
-==============
+Aradiabot
+=========
 A [PircBotX](https://code.google.com/p/pircbotx/) IRC bot API.
 
 Website: http://www.iarekylew00t.me/
