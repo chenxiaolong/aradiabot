@@ -5,7 +5,7 @@ package me.iarekylew00t.ircbot.exceptions;
  * @author Kyle Colantonio <IAreKyleW00t kyle10468@gmail.com>
  */
 public class RegisteredPluginException extends Exception {
-	private static final long serialVersionUID = 373425231903629552L;
+	private static final long serialVersionUID = -4840782624447521227L;
 
 	public RegisteredPluginException() {
 		super();
