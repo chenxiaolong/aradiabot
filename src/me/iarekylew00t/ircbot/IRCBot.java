@@ -2,10 +2,11 @@ package me.iarekylew00t.ircbot;
 
 import java.io.File;
 
+import me.iarekylew00t.ircbot.exceptions.RegisteredPluginException;
+import me.iarekylew00t.ircbot.exceptions.UnRegisteredPluginException;
 import me.iarekylew00t.ircbot.listeners.CommandListener;
 import me.iarekylew00t.ircbot.listeners.InternalCommandListener;
 import me.iarekylew00t.ircbot.plugin.IRCPlugin;
-import me.iarekylew00t.ircbot.plugin.PluginBase;
 import me.iarekylew00t.ircbot.plugin.PluginList;
 
 import org.pircbotx.Channel;
@@ -38,16 +39,24 @@ public class IRCBot extends PircBotX {
 		if (!PLUGIN_DIR.exists()) {
 			PLUGIN_DIR.mkdir();
 		}
-		this.addPlugin(new CommandListener());
-		this.addPlugin(new InternalCommandListener());
+		this.getConfiguration().getListenerManager().addListener(new CommandListener());
+		this.getConfiguration().getListenerManager().addListener(new InternalCommandListener());
 	}
 	
-	public void addPlugin(PluginBase pl) {
+	public void addPlugin(IRCPlugin pl) throws RegisteredPluginException {
+		if (PluginList.contains(pl)) {
+			throw new RegisteredPluginException("Plugin '" + pl.getName() + "' is already registered.");
+		}
 		this.getConfiguration().getListenerManager().addListener(pl);
+		PluginList.add(pl);
 	}
 	
-	public void removePlugin(PluginBase pl) {
+	public void removePlugin(IRCPlugin pl) throws UnRegisteredPluginException {
+		if (!PluginList.contains(pl)) {
+			throw new UnRegisteredPluginException("Plugin '" + pl.getName() + "' is not registered.");
+		}
 		this.getConfiguration().getListenerManager().removeListener(pl);
+		PluginList.remove(pl);
 	}
 
 	public synchronized void sendMessage(String target, String message) {
@@ -148,7 +157,10 @@ public class IRCBot extends PircBotX {
 		this.LOG.info("Shutting down Aradiabot...");
 		for (IRCPlugin pl : PluginList.getList()) {
 			this.LOG.info("Disabling " + pl.getName() + " v" + pl.getVersion());
-			if (!pl.onDisable()) {
+			try {
+				pl.onDisable();
+			} catch (Exception e) {
+				e.printStackTrace();
 				this.LOG.error("Error disabling " + pl.getName() + " v" + pl.getVersion());
 			}
 			this.getConfiguration().getListenerManager().removeListener(pl);

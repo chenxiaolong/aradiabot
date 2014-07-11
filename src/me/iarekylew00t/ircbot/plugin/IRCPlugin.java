@@ -9,6 +9,7 @@ import me.iarekylew00t.ircbot.IRCBot;
 import me.iarekylew00t.ircbot.command.Command;
 import me.iarekylew00t.ircbot.command.CommandList;
 import me.iarekylew00t.ircbot.exceptions.RegisteredCommandException;
+import me.iarekylew00t.ircbot.exceptions.UnRegisteredCommandException;
 
 import org.slf4j.LoggerFactory;
 
@@ -70,22 +71,26 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 			LOG.setLevel(Level.INFO);
 		}
 		LOG.setAdditive(false);
-
-		LOG.info("Enabling " + this.NAME + " v" + this.VER);
-		PluginList.add(this);
+		
 		try {
+			LOG.info("Enabling " + this.NAME + " v" + this.VER);
 			if (this.onEnable()) {
 				this.setEnabled(true);
+				return;
 			} else {
-				LOG.error("Disabling "+ this.NAME + " v" + this.VER);
-				this.setEnabled(false);
-				this.onDisable();
+				throw new Exception("Error occured when enabling plugin");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error("Disabling "+ this.NAME + " v" + this.VER + "; Error occured.");
+			LOG.error("Disabling "+ this.NAME + " v" + this.VER);
 			this.setEnabled(false);
-			this.onDisable();
+			try {
+				this.onDisable();
+				return;
+			} catch (Exception e1) {
+				e1.printStackTrace();
+				LOG.error("Error disabling plugin: " + e1.getMessage());
+			}
 		}
 	}
 	
@@ -94,7 +99,7 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 	 * if no errors occur. False will indicate a problem and disable the plugin.
 	 * @return
 	 */
-	public boolean onEnable() {
+	public boolean onEnable() throws Exception {
 		return true;
 	}
 	
@@ -103,14 +108,14 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 	 * if no errors occur. False will indicate a problem.
 	 * @return
 	 */
-	public boolean onDisable() {
+	public boolean onDisable() throws Exception {
 		return true;
 	}
 	
 	public void addCommand(String name, String desc, String usage, List<String> aliases, int perm) throws RegisteredCommandException {
 		Command cmd = new Command(name, desc, usage, aliases, perm);
 		if (CommandList.contains(cmd)) {
-			throw new RegisteredCommandException("Command already exists.");
+			throw new RegisteredCommandException("Command '" + name + "' already registered.");
 		}
 		CommandList.add(cmd);
 		this.CMDS.add(cmd);
@@ -119,7 +124,7 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 	public void addCommand(String name, String desc, String usage) throws RegisteredCommandException {
 		Command cmd = new Command(name, desc, usage);
 		if (CommandList.contains(cmd)) {
-			throw new RegisteredCommandException("Command already exists.");
+			throw new RegisteredCommandException("Command '" + name + "' already registered.");
 		}
 		CommandList.add(cmd);
 		this.CMDS.add(cmd);
@@ -128,7 +133,7 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 	public void addCommand(String name) throws RegisteredCommandException {
 		Command cmd = new Command(name);
 		if (CommandList.contains(cmd)) {
-			throw new RegisteredCommandException("Command already exists.");
+			throw new RegisteredCommandException("Command '" + name + "' already registered.");
 		}
 		CommandList.add(cmd);
 		this.CMDS.add(cmd);
@@ -136,10 +141,18 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 	
 	public void addCommand(Command cmd) throws RegisteredCommandException {
 		if (CommandList.contains(cmd)) {
-			throw new RegisteredCommandException("Command already exists.");
+			throw new RegisteredCommandException("Command '" + cmd.getName() + "' already registered.");
 		}
 		CommandList.add(cmd);
 		this.CMDS.add(cmd);
+	}
+	
+	public void removeCommand(Command cmd) throws UnRegisteredCommandException {
+		if (!CommandList.contains(cmd)) {
+			throw new UnRegisteredCommandException("Command '" + cmd.getName() + "' is not a registered.");
+		}
+		CommandList.remove(cmd);
+		this.CMDS.remove(cmd);
 	}
 	
 	public String getName() {
