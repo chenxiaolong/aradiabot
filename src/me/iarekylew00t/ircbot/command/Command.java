@@ -75,7 +75,7 @@ public class Command implements Comparable {
 	public String toString() {
 		return this.NAME;
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof String) {

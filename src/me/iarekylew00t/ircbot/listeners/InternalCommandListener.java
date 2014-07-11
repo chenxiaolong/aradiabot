@@ -35,9 +35,9 @@ public class InternalCommandListener extends PluginBase {
 
 	@Override
 	public void onCommand(User user, Channel channel, Command command, String[] args) throws Exception {
-		if (command.equals("version")) {
+		if (command.getName().equalsIgnoreCase("version")) {
 			channel.send().message(Aradiabot.getName() + " version " + Aradiabot.getVersion() + " (PircBotX: " + Aradiabot.getAPIVersion() + ")");
-		} else if (command.equals("plugins")) {
+		} else if (command.getName().equalsIgnoreCase("plugins")) {
 			List<List<IRCPlugin>> pl = ListUtils.split(Aradiabot.getPlugins(), 25);
 			int size = Aradiabot.getPlugins().size();
 			int pages = pl.size();
@@ -77,14 +77,14 @@ public class InternalCommandListener extends PluginBase {
 			} else {
 				channel.send().message(Colors.RED + Colors.BOLD + "Too many arguments; Usage: " + command.getUsage());
 			}
-		} else if (command.equals("commands")) {
-			List<List<Command>> cmds = ListUtils.split(Aradiabot.getCommands(), 30);
+		} else if (command.getName().equalsIgnoreCase("commands")) {
+			CommandList.sort();
+			List<List<Command>> cmds = ListUtils.split(Aradiabot.getCommands(), 50);
 			int size = Aradiabot.getCommands().size();
 			int pages = cmds.size();
 			String[] page = new String[pages];
 			for (int i = 0; i < pages; i++) {
 				List<Command> c = cmds.get(i);
-				Collections.sort(c);
 				page[i] = "";
 				for (int j = 0; j < c.size(); j++) {
 					page[i] += c.get(j).getName() + ", ";
@@ -113,7 +113,7 @@ public class InternalCommandListener extends PluginBase {
 			} else {
 				channel.send().message(Colors.RED + Colors.BOLD + "Too many arguments; Usage: " + command.getUsage());
 			}
-		} else if (command.equals("help")) {
+		} else if (command.getName().equalsIgnoreCase("help")) {
 			if (args.length == 1) {
 				String cmd = args[0];
 				if (CommandList.contains(cmd)) {
@@ -127,7 +127,7 @@ public class InternalCommandListener extends PluginBase {
 			} else {
 				channel.send().message(Colors.RED + Colors.BOLD + "Too many arguments; Usage: " + command.getUsage());
 			}
-		} else if (command.equals("alias")) {
+		} else if (command.getName().equalsIgnoreCase("alias")) {
 			if (args.length == 1) {
 				String cmd = args[0];
 				if (CommandList.contains(cmd)) {
@@ -150,14 +150,14 @@ public class InternalCommandListener extends PluginBase {
 			} else {
 				channel.send().message(Colors.RED + Colors.BOLD + "Too many arguments; Usage: " + command.getUsage());
 			}
-		} else if (command.equals("shutdown")) {
+		} else if (command.getName().equalsIgnoreCase("shutdown")) {
 			if (IRC.getPermissionLevel(channel, user) == command.getPermission()) {
 				channel.send().message("Shutting down Aradiabot...");
 				Aradiabot.shutdown();
 			} else {
 				channel.send().message(user, Colors.RED + Colors.BOLD + "You do not have permission to do that. (Req: " + IRC.permissionToString(command.getPermission()) + ")");
 			}
-		} else if (command.equals("source")) {
+		} else if (command.getName().equalsIgnoreCase("source")) {
 			channel.send().message(Aradiabot.getName() + ": https://github.com/IAreKyleW00t/Aradiabot");
 		}
 	}
