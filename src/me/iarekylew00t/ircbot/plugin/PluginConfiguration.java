@@ -60,6 +60,12 @@ public class PluginConfiguration implements Configuration {
 		this.save();
 		this.load();
 	}
+	
+	@Override
+	public void reload() {
+		this.load();
+		this.save();
+	}
 
 	@Override
 	public void load() {

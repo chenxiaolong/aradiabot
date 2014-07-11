@@ -23,27 +23,39 @@ public class FileConfiguration implements Configuration {
 		this(new File(file));
 	}
 	
+	@Override
 	public String get(String prop) {
 		return this.PROPS.getProperty(prop);
 	}
-	
+
+	@Override
 	public String get(String prop, String defaultVal) {
 		return this.PROPS.getProperty(prop, defaultVal);
 	}
-	
+
+	@Override
 	public void set(String prop, String newValue) {
 		this.PROPS.setProperty(prop, newValue);
 	}
-	
+
+	@Override
 	public boolean firstTimeLoad() {
 		return FIRST_TIME_LOAD;
 	}
-	
+
+	@Override
 	public void update() {
 		this.save();
 		this.load();
 	}
-	
+
+	@Override
+	public void reload() {
+		this.load();
+		this.save();
+	}
+
+	@Override
 	public void load() {
 		try {
 			if (!this.FILE.exists()) {
@@ -55,7 +67,8 @@ public class FileConfiguration implements Configuration {
 			e.printStackTrace();
 		}
 	}
-	
+
+	@Override
 	public void save() {
 		try {
 			this.PROPS.store(new FileOutputStream(this.FILE), this.FILE.getName() +  " Configuration File");

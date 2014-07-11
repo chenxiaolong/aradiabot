@@ -10,6 +10,7 @@ public interface Configuration {
 	public void set(String prop, String newValue);
 	public boolean firstTimeLoad();
 	public void update();
+	public void reload();
 	public void load();
 	public void save();
 }
