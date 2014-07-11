@@ -37,9 +37,12 @@ public enum Aradiabot {
 		BOT = bot;
 		bot.getLogger().info("This bot is running " + getName() + " version " + getVersion() + " (PircBotX API version " + getAPIVersion() + ")");
 	}
-	
+
 	public static String getName() {
 		return BOT.getName();
+	}
+	public static String getNick() {
+		return BOT.getNick();
 	}
 	
 	public static String getVersion() {
