@@ -1,6 +1,6 @@
 Aradiabot
 =========
-A [PircBotX](https://code.google.com/p/pircbotx/) IRC bot API.
+An IRC bot based off the [PircBotX](https://code.google.com/p/pircbotx/) API.
 
 Website: http://www.iarekylew00t.me/  
 Author: Kyle Colantonio (IAreKyleW00t)
