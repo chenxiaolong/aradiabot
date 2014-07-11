@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import me.iarekylew00t.ircbot.Aradiabot;
 import me.iarekylew00t.ircbot.command.Command;
 import me.iarekylew00t.ircbot.command.CommandList;
 import me.iarekylew00t.ircbot.hooks.events.CommandEvent;
@@ -12,9 +13,6 @@ import me.iarekylew00t.ircbot.plugin.PluginBase;
 
 import org.pircbotx.Utils;
 import org.pircbotx.hooks.events.MessageEvent;
-import org.slf4j.LoggerFactory;
-
-import ch.qos.logback.classic.Logger;
 
 /**
  * Custom Listener that will dispatch {@link CommandEvent}'s 
@@ -33,7 +31,7 @@ public class CommandListener extends PluginBase {
 		if (messageRaw.startsWith("$")) {
 			String[] arr = messageRaw.split(" ", 2);
 			String cmd = arr[0].substring(1);
-			LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME).info(e.getUser().getNick() + " issused command: " + cmd);
+			Aradiabot.getLogger().info(e.getUser().getNick() + " issused command: " + cmd);
 
 			if (CommandList.contains(cmd)) {
 				Command command = CommandList.get(cmd);

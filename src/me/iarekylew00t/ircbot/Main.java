@@ -15,6 +15,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.FileAppender;
 
+import me.iarekylew00t.plugins.BasicCommands;
 import me.iarekylew00t.utils.FileConfiguration;
 
 /**
@@ -23,7 +24,7 @@ import me.iarekylew00t.utils.FileConfiguration;
  */
 public class Main {
 	private static FileConfiguration CONFIG = new FileConfiguration("CONFIG.ini");
-	private static Logger LOG = (Logger) LoggerFactory.getLogger(Main.class);
+	private static Logger LOG = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 	
 	public static void main(String[] args) {
 		init();
@@ -57,6 +58,7 @@ public class Main {
 		IRCBot bot = new IRCBot(botConfig);
 		bot.setDebug(Boolean.parseBoolean(CONFIG.get("debug", "false")));
 		/* Load all plugins here */
+		bot.addPlugin(new BasicCommands());
 		try {
 			bot.startBot();
 		} catch (IOException e) {
@@ -74,8 +76,7 @@ public class Main {
 	 * Programatically configures Logback initially.
 	 */
 	private static void init() {
-		Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-		LoggerContext context = root.getLoggerContext();
+		LoggerContext context = LOG.getLoggerContext();
 		context.reset();
 		
 		PatternLayoutEncoder encoder = new PatternLayoutEncoder();
@@ -96,14 +97,14 @@ public class Main {
 		fAppender.setContext(context);
 		fAppender.start();
 		
-		root.addAppender(cAppender);
-		root.addAppender(fAppender);
+		LOG.addAppender(cAppender);
+		LOG.addAppender(fAppender);
 		if (Boolean.parseBoolean(CONFIG.get("debug", "false"))) {
-			root.setLevel(Level.DEBUG);
-			root.debug("===== DEBUGGING MODE ENABLED =====");
+			LOG.setLevel(Level.DEBUG);
+			LOG.debug("===== DEBUGGING MODE ENABLED =====");
 		} else {
-			root.setLevel(Level.INFO);
+			LOG.setLevel(Level.INFO);
 		}
-		root.setAdditive(false);
+		LOG.setAdditive(false);
 	}
 }
