@@ -22,7 +22,14 @@ public final class IRC {
 							NOTICE		= 2,
 							PRIVATE		= 3;
 	
-
+	public static boolean isVerified(User user) {
+		return user.isVerified();
+	}
+	
+	public static boolean isAway(User user) {
+		return user.isAway();
+	}
+	
 	public static int getPermissionLevel(Channel channel, User user) {
 		if (user.isIrcop())
 			return IRC_OP;
