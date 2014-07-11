@@ -25,7 +25,7 @@ public class Main {
 	private static FileConfiguration CONFIG = new FileConfiguration("CONFIG.ini");
 	private static Logger LOG = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		init();
 		LOG.info("Starting Aradiabot v" + IRCBot.VERSION + "...");	
 		if (CONFIG.firstTimeLoad() == true) {
