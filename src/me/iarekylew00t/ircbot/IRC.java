@@ -17,6 +17,12 @@ public final class IRC {
 							OWNER		= 5,
 							IRC_OP		= 6;
 	
+	public static final int MESSAGE		= 0,
+							ACTION		= 1,
+							NOTICE		= 2,
+							PRIVATE		= 3;
+	
+
 	public static int getPermissionLevel(Channel channel, User user) {
 		if (user.isIrcop())
 			return IRC_OP;
@@ -30,9 +36,20 @@ public final class IRC {
 			return HALF_OP;
 		else if (channel.hasVoice(user))
 			return VOICE;
-		
-		return REGULAR;
-	}	
+		else
+			return REGULAR;
+	}
+	
+	public static int getMessageType(String type) {
+		if (type.equalsIgnoreCase("ACTION"))
+			return ACTION;
+		else if (type.equalsIgnoreCase("NOTICE"))
+			return NOTICE;
+		else if (type.equalsIgnoreCase("PRIVATE"))
+			return PRIVATE;
+		else 
+			return MESSAGE;
+	}
 	
 	public static String permissionToString(int perm) {
 		if (perm == IRC.IRC_OP)
@@ -53,5 +70,18 @@ public final class IRC {
 			return "BANNED"; 
 		else
 			throw new IllegalArgumentException("Invalid permission level given. Use an integer from -1-6");
+	}
+	
+	public static String messageTypeToString(int type) {
+		if (type == IRC.MESSAGE)
+			return "MESSAGE";
+		else if (type == IRC.ACTION)
+			return "ACTION";
+		else if (type == IRC.NOTICE)
+			return "NOTICE";
+		else if (type == IRC.PRIVATE)
+			return "PRIVATE";
+		else
+			throw new IllegalArgumentException("Invalid message type given. Use an integer from 0-3");
 	}
 }
