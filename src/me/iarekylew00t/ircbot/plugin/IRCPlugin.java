@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.iarekylew00t.ircbot.Aradiabot;
+import me.iarekylew00t.ircbot.IRC;
 import me.iarekylew00t.ircbot.IRCBot;
 import me.iarekylew00t.ircbot.command.Command;
 import me.iarekylew00t.ircbot.command.CommandList;
@@ -112,6 +113,14 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 		return true;
 	}
 	
+	public void addCommand(Command cmd) throws RegisteredCommandException {
+		if (CommandList.contains(cmd)) {
+			throw new RegisteredCommandException("Command '" + cmd.getName() + "' already registered.");
+		}
+		CommandList.add(cmd);
+		this.CMDS.add(cmd);
+	}
+	
 	public void addCommand(String name, String desc, String usage, List<String> aliases, int perm) throws RegisteredCommandException {
 		Command cmd = new Command(name, desc, usage, aliases, perm);
 		if (CommandList.contains(cmd)) {
@@ -121,30 +130,16 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 		this.CMDS.add(cmd);
 	}
 	
+	public void addCommand(String name, String desc, String usage, List<String> aliases) throws RegisteredCommandException {
+		this.addCommand(name, desc, usage, aliases, IRC.REGULAR);
+	}
+	
 	public void addCommand(String name, String desc, String usage) throws RegisteredCommandException {
-		Command cmd = new Command(name, desc, usage);
-		if (CommandList.contains(cmd)) {
-			throw new RegisteredCommandException("Command '" + name + "' already registered.");
-		}
-		CommandList.add(cmd);
-		this.CMDS.add(cmd);
+		this.addCommand(name, desc, usage, new ArrayList<String>(), IRC.REGULAR);
 	}
 	
 	public void addCommand(String name) throws RegisteredCommandException {
-		Command cmd = new Command(name);
-		if (CommandList.contains(cmd)) {
-			throw new RegisteredCommandException("Command '" + name + "' already registered.");
-		}
-		CommandList.add(cmd);
-		this.CMDS.add(cmd);
-	}
-	
-	public void addCommand(Command cmd) throws RegisteredCommandException {
-		if (CommandList.contains(cmd)) {
-			throw new RegisteredCommandException("Command '" + cmd.getName() + "' already registered.");
-		}
-		CommandList.add(cmd);
-		this.CMDS.add(cmd);
+		this.addCommand(name, "", "$" + name, new ArrayList<String>(), IRC.REGULAR);
 	}
 	
 	public void removeCommand(Command cmd) throws UnRegisteredCommandException {

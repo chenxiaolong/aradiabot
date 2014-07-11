@@ -23,11 +23,19 @@ public class Command implements Comparable {
 		this(name, desc, usage, new ArrayList<String>(), IRC.REGULAR);
 	}
 	
+	public Command(String name, String desc, String usage, List<String> aliases) {
+		this(name, desc, usage, aliases, IRC.REGULAR);
+	}
+	
 	public Command(String name, String desc, String usage, List<String> aliases, int perm) {
 		this.NAME = name;
 		this.DESC = desc;
 		this.USAGE = usage;
-		this.ALIASES = new ArrayList<String>(aliases);
+		if (aliases == null) {
+			this.ALIASES = new ArrayList<String>();
+		} else {
+			this.ALIASES = new ArrayList<String>(aliases);
+		}
 		this.PERM = perm;
 	}
 	
