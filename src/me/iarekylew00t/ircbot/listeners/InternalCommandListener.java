@@ -123,7 +123,7 @@ public class InternalCommandListener extends PluginBase {
 					channel.send().message(Colors.RED + Colors.BOLD + "\"" + cmd + "\" is not a valid command. Use $commands for a list of all available commands.");
 				}
 			} else if (args.length == 0) {
-				channel.send().message(command.getDescription() + " Usage: " + command.getUsage());
+				channel.send().message(command.getDescription() + " - Usage: " + command.getUsage());
 			} else {
 				channel.send().message(Colors.RED + Colors.BOLD + "Too many arguments; Usage: " + command.getUsage());
 			}

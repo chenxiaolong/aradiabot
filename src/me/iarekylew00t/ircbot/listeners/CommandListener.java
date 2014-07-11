@@ -30,7 +30,7 @@ public class CommandListener extends PluginBase {
 		
 		if (messageRaw.startsWith("$")) {
 			String[] arr = messageRaw.split(" ", 2);
-			String cmd = arr[0].substring(1);
+			String cmd = arr[0].substring(1).toLowerCase();
 			Aradiabot.getLogger().info(e.getUser().getNick() + " issused command: " + cmd);
 
 			if (CommandList.contains(cmd)) {
