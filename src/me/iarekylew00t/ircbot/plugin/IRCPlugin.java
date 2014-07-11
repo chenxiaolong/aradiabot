@@ -122,29 +122,24 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 	}
 	
 	public void addCommand(String name, String desc, String usage, List<String> aliases, int perm) throws RegisteredCommandException {
-		Command cmd = new Command(name, desc, usage, aliases, perm);
-		if (CommandList.contains(cmd)) {
-			throw new RegisteredCommandException("Command '" + name + "' already registered.");
-		}
-		CommandList.add(cmd);
-		this.CMDS.add(cmd);
+		this.addCommand(new Command(name, desc, usage, aliases, perm));
 	}
 	
 	public void addCommand(String name, String desc, String usage, List<String> aliases) throws RegisteredCommandException {
-		this.addCommand(name, desc, usage, aliases, IRC.REGULAR);
+		this.addCommand(new Command(name, desc, usage, aliases, IRC.REGULAR));
 	}
 	
 	public void addCommand(String name, String desc, String usage) throws RegisteredCommandException {
-		this.addCommand(name, desc, usage, new ArrayList<String>(), IRC.REGULAR);
+		this.addCommand(new Command(name, desc, usage, new ArrayList<String>(), IRC.REGULAR));
 	}
 	
 	public void addCommand(String name) throws RegisteredCommandException {
-		this.addCommand(name, "", "$" + name, new ArrayList<String>(), IRC.REGULAR);
+		this.addCommand(new Command(name, "", "$" + name, new ArrayList<String>(), IRC.REGULAR));
 	}
 	
 	public void removeCommand(Command cmd) throws UnRegisteredCommandException {
 		if (!CommandList.contains(cmd)) {
-			throw new UnRegisteredCommandException("Command '" + cmd.getName() + "' is not a registered.");
+			throw new UnRegisteredCommandException("Command '" + cmd.getName() + "' is not registered.");
 		}
 		CommandList.remove(cmd);
 		this.CMDS.remove(cmd);
