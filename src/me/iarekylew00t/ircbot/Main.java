@@ -15,7 +15,6 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.FileAppender;
 
-import me.iarekylew00t.plugins.BasicCommands;
 import me.iarekylew00t.utils.FileConfiguration;
 
 /**
@@ -58,7 +57,6 @@ public class Main {
 		IRCBot bot = new IRCBot(botConfig);
 		bot.setDebug(Boolean.parseBoolean(CONFIG.get("debug", "false")));
 		/* Load all plugins here */
-		bot.addPlugin(new BasicCommands());
 		try {
 			bot.startBot();
 		} catch (IOException e) {
