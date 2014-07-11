@@ -8,6 +8,7 @@ import me.iarekylew00t.ircbot.Aradiabot;
 import me.iarekylew00t.ircbot.IRCBot;
 import me.iarekylew00t.ircbot.command.Command;
 import me.iarekylew00t.ircbot.command.CommandList;
+import me.iarekylew00t.ircbot.exceptions.RegisteredCommandException;
 
 import org.slf4j.LoggerFactory;
 
@@ -106,25 +107,37 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 		return true;
 	}
 	
-	public void addCommand(String name, String desc, String usage, List<String> aliases, int perm) {
+	public void addCommand(String name, String desc, String usage, List<String> aliases, int perm) throws RegisteredCommandException {
 		Command cmd = new Command(name, desc, usage, aliases, perm);
+		if (CommandList.contains(cmd)) {
+			throw new RegisteredCommandException("Command already exists.");
+		}
 		CommandList.add(cmd);
 		this.CMDS.add(cmd);
 	}
 	
-	public void addCommand(String name, String desc, String usage) {
+	public void addCommand(String name, String desc, String usage) throws RegisteredCommandException {
 		Command cmd = new Command(name, desc, usage);
+		if (CommandList.contains(cmd)) {
+			throw new RegisteredCommandException("Command already exists.");
+		}
 		CommandList.add(cmd);
 		this.CMDS.add(cmd);
 	}
 	
-	public void addCommand(String name) {
+	public void addCommand(String name) throws RegisteredCommandException {
 		Command cmd = new Command(name);
+		if (CommandList.contains(cmd)) {
+			throw new RegisteredCommandException("Command already exists.");
+		}
 		CommandList.add(cmd);
 		this.CMDS.add(cmd);
 	}
 	
-	public void addCommand(Command cmd) {
+	public void addCommand(Command cmd) throws RegisteredCommandException {
+		if (CommandList.contains(cmd)) {
+			throw new RegisteredCommandException("Command already exists.");
+		}
 		CommandList.add(cmd);
 		this.CMDS.add(cmd);
 	}
