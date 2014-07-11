@@ -30,6 +30,7 @@ public class InternalCommandListener extends PluginBase {
 		CommandList.add(new Command("help", "Displays all information of a given command including the description, usage, and the required permission. Arguments written with <this> are required, [these] are optional.", "$help [command]"));
 		CommandList.add(new Command("alias", "Displays all aliases of a command.", "$alias <command>"));
 		CommandList.add(new Command("shutdown", "Disables all plugins and stops the bot.", "$shutdown", Arrays.asList("stop", "exit"), IRC.OP));
+		CommandList.add(new Command("source", "Provides a link to Aradiabot's source code.", "$source", Arrays.asList("src"), IRC.REGULAR));
 	}
 
 	@Override
@@ -119,7 +120,7 @@ public class InternalCommandListener extends PluginBase {
 					Command c = CommandList.get(cmd);
 					channel.send().message("[" + IRC.permissionToString(c.getPermission()) + "] " + c.getDescription() + " Usage: " + c.getUsage());
 				} else {
-					channel.send().message(Colors.RED + Colors.BOLD + "\"" + cmd + "\" is not a valid command. Use $commands for a list of all valid commands.");
+					channel.send().message(Colors.RED + Colors.BOLD + "\"" + cmd + "\" is not a valid command. Use $commands for a list of all available commands.");
 				}
 			} else if (args.length == 0) {
 				channel.send().message(command.getDescription() + " Usage: " + command.getUsage());
@@ -156,6 +157,8 @@ public class InternalCommandListener extends PluginBase {
 			} else {
 				channel.send().message(user, Colors.RED + Colors.BOLD + "You do not have permission to do that. (Req: " + IRC.permissionToString(command.getPermission()) + ")");
 			}
+		} else if (command.equals("source")) {
+			channel.send().message(Aradiabot.getName() + ": https://github.com/IAreKyleW00t/Aradiabot");
 		}
 	}
 }
