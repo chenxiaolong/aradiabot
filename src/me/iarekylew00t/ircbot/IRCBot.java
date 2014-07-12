@@ -76,7 +76,7 @@ public class IRCBot extends PircBotX {
 	}
 	
 	public synchronized void sendMessageToAll(String message) {
-		for (Channel c : getUserChannelDao().getAllChannels()) {
+		for (Channel c : this.getUserChannelDao().getAllChannels()) {
 			c.send().message(message);
 		}
 	}
@@ -94,7 +94,7 @@ public class IRCBot extends PircBotX {
 	}
 	
 	public synchronized void sendNoticeToAll(String notice) {
-		for (Channel c : getUserChannelDao().getAllChannels()) {
+		for (Channel c : this.getUserChannelDao().getAllChannels()) {
 			c.send().notice(notice);
 		}
 	}
@@ -112,7 +112,7 @@ public class IRCBot extends PircBotX {
 	}
 	
 	public synchronized void sendActionToAll(String action) {
-		for (Channel c : getUserChannelDao().getAllChannels()) {
+		for (Channel c : this.getUserChannelDao().getAllChannels()) {
 			c.send().action(action);
 		}
 	}
@@ -126,13 +126,13 @@ public class IRCBot extends PircBotX {
 	}
 	
 	public synchronized void kickFromAll(User user) {
-		for (Channel c : getUserChannelDao().getAllChannels()) {
+		for (Channel c : this.getUserChannelDao().getAllChannels()) {
 			c.send().kick(user, "No reason.");
 		}
 	}
 	
 	public synchronized void kickFromAll(User user, String reason) {
-		for (Channel c : getUserChannelDao().getAllChannels()) {
+		for (Channel c : this.getUserChannelDao().getAllChannels()) {
 			c.send().kick(user, reason);
 		}
 	}
@@ -146,13 +146,13 @@ public class IRCBot extends PircBotX {
 	}
 	
 	public synchronized void banFromAll(User user) {
-		for (Channel c : getUserChannelDao().getAllChannels()) {
+		for (Channel c : this.getUserChannelDao().getAllChannels()) {
 			c.send().ban(user.getHostmask());
 		}
 	}
 	
 	public synchronized void banFromAll(String hostmask) {
-		for (Channel c : getUserChannelDao().getAllChannels()) {
+		for (Channel c : this.getUserChannelDao().getAllChannels()) {
 			c.send().ban(hostmask);
 		}
 	}
