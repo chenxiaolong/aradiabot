@@ -58,6 +58,10 @@ public class IRCBot extends PircBotX {
 		this.getConfiguration().getListenerManager().removeListener(pl);
 		PluginList.remove(pl);
 	}
+	
+	public synchronized void sendRawMessage(String message) {
+		this.sendRawMessage(message);
+	}
 
 	public synchronized void sendMessage(String target, String message) {
 		this.sendIRC().message(target, message);
@@ -72,7 +76,7 @@ public class IRCBot extends PircBotX {
 	}
 	
 	public synchronized void sendMessageToAll(String message) {
-		for (Channel c : this.getUserChannelDao().getAllChannels()) {
+		for (Channel c : getUserChannelDao().getAllChannels()) {
 			c.send().message(message);
 		}
 	}
@@ -90,7 +94,7 @@ public class IRCBot extends PircBotX {
 	}
 	
 	public synchronized void sendNoticeToAll(String notice) {
-		for (Channel c : this.getUserChannelDao().getAllChannels()) {
+		for (Channel c : getUserChannelDao().getAllChannels()) {
 			c.send().notice(notice);
 		}
 	}
@@ -108,7 +112,7 @@ public class IRCBot extends PircBotX {
 	}
 	
 	public synchronized void sendActionToAll(String action) {
-		for (Channel c : this.getUserChannelDao().getAllChannels()) {
+		for (Channel c : getUserChannelDao().getAllChannels()) {
 			c.send().action(action);
 		}
 	}
@@ -122,13 +126,13 @@ public class IRCBot extends PircBotX {
 	}
 	
 	public synchronized void kickFromAll(User user) {
-		for (Channel c : this.getUserChannelDao().getAllChannels()) {
+		for (Channel c : getUserChannelDao().getAllChannels()) {
 			c.send().kick(user, "No reason.");
 		}
 	}
 	
 	public synchronized void kickFromAll(User user, String reason) {
-		for (Channel c : this.getUserChannelDao().getAllChannels()) {
+		for (Channel c : getUserChannelDao().getAllChannels()) {
 			c.send().kick(user, reason);
 		}
 	}
@@ -142,26 +146,26 @@ public class IRCBot extends PircBotX {
 	}
 	
 	public synchronized void banFromAll(User user) {
-		for (Channel c : this.getUserChannelDao().getAllChannels()) {
+		for (Channel c : getUserChannelDao().getAllChannels()) {
 			c.send().ban(user.getHostmask());
 		}
 	}
 	
 	public synchronized void banFromAll(String hostmask) {
-		for (Channel c : this.getUserChannelDao().getAllChannels()) {
+		for (Channel c : getUserChannelDao().getAllChannels()) {
 			c.send().ban(hostmask);
 		}
 	}
 	
 	public void shutdown() {
-		this.LOG.info("Shutting down Aradiabot...");
+		LOG.info("Shutting down Aradiabot...");
 		for (IRCPlugin pl : PluginList.getList()) {
-			this.LOG.info("Disabling " + pl.getName() + " v" + pl.getVersion());
+			LOG.info("Disabling " + pl.getName() + " v" + pl.getVersion());
 			try {
 				pl.onDisable();
 			} catch (Exception e) {
 				e.printStackTrace();
-				this.LOG.error("Error disabling " + pl.getName() + " v" + pl.getVersion());
+				LOG.error("Error disabling " + pl.getName() + " v" + pl.getVersion());
 			}
 			this.getConfiguration().getListenerManager().removeListener(pl);
 		}
@@ -169,7 +173,7 @@ public class IRCBot extends PircBotX {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-			this.LOG.error("Error shutting down Aradiabot. Thread interrupted");
+			LOG.error("Error shutting down Aradiabot. Thread interrupted");
 		}
 		this.stopBotReconnect();
 		this.shutdown(true);
@@ -177,11 +181,11 @@ public class IRCBot extends PircBotX {
 	}
 	
 	public void setDebug(boolean debug) {
-		this.DEBUG = debug;
+		DEBUG = debug;
 	}
 	
 	public boolean isDebugging() {
-		return this.DEBUG;
+		return DEBUG;
 	}
 	
 	public String getName() {
@@ -201,6 +205,6 @@ public class IRCBot extends PircBotX {
 	}
 	
 	public Logger getLogger() {
-		return this.LOG;
+		return LOG;
 	}
 }

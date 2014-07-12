@@ -28,15 +28,15 @@ public class Command implements Comparable {
 	}
 	
 	public Command(String name, String desc, String usage, List<String> aliases, int perm) {
-		this.NAME = name;
-		this.DESC = desc;
-		this.USAGE = usage;
+		NAME = name;
+		DESC = desc;
+		USAGE = usage;
 		if (aliases == null) {
-			this.ALIASES = new ArrayList<String>();
+			ALIASES = new ArrayList<String>();
 		} else {
-			this.ALIASES = new ArrayList<String>(aliases);
+			ALIASES = new ArrayList<String>(aliases);
 		}
-		this.PERM = perm;
+		PERM = perm;
 	}
 	
 	public boolean isRegistered() {
@@ -44,58 +44,58 @@ public class Command implements Comparable {
 	}
 	
 	public String getName() {
-		return this.NAME;
+		return NAME;
 	}
 	
 	public String getDescription() {
-		return this.DESC;
+		return DESC;
 	}
 	
 	public String getUsage() {
-		return this.USAGE;
+		return USAGE;
 	}
 	
 	public List<String> getAliases() {
-		return this.ALIASES;
+		return ALIASES;
 	}
 	
 	public int getPermission() {
-		return this.PERM;
+		return PERM;
 	}
 	
 	public void setDescription(String desc) {
-		this.DESC = desc;
+		DESC = desc;
 	}
 	
 	public void setUsage(String usage) {
-		this.USAGE = usage;
+		USAGE = usage;
 	}
 	
 	public void setAliases(List<String> aliases) {
-		this.ALIASES = new ArrayList<String>(aliases);
+		ALIASES = new ArrayList<String>(aliases);
 	}
 	
 	public void setPermission(int perm) {
-		this.PERM = perm;
+		PERM = perm;
 	}
 	
 	@Override
 	public String toString() {
-		return this.NAME;
+		return NAME;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof String) {
-			return this.NAME.equals((String) o);
+			return NAME.equals((String) o);
 		} else if (o instanceof Command) {
-			return this.NAME.equals(((Command) o).getName());
+			return NAME.equals(((Command) o).getName());
 		}
 		return false;
 	}
 
 	@Override
 	public int compareTo(Object o) {
-		return this.NAME.compareTo(((Command) o).getName());
+		return NAME.compareTo(((Command) o).getName());
 	}
 }

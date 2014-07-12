@@ -20,12 +20,12 @@ public class PluginConfiguration implements Configuration {
 	private boolean FIRST_TIME_LOAD = false;
 	
 	public PluginConfiguration(IRCPlugin plugin, String config) {
-		this.NAME = plugin.getName();
-		this.VERSION = plugin.getVersion();
-		this.FILE = new File("./plugins/" + plugin.getName() + "/" + config);
+		NAME = plugin.getName();
+		VERSION = plugin.getVersion();
+		FILE = new File("./plugins/" + plugin.getName() + "/" + config);
 		plugin.getDataFolder().mkdir();
-		this.LOG = plugin.getLogger();
-		this.load();
+		LOG = plugin.getLogger();
+		load();
 	}
 	
 	public PluginConfiguration(IRCPlugin plugin) {
@@ -34,17 +34,17 @@ public class PluginConfiguration implements Configuration {
 
 	@Override
 	public String get(String prop) {
-		return this.PROPS.getProperty(prop);
+		return PROPS.getProperty(prop);
 	}
 
 	@Override
 	public String get(String prop, String defaultVal) {
-		return this.PROPS.getProperty(prop, defaultVal);
+		return PROPS.getProperty(prop, defaultVal);
 	}
 
 	@Override
 	public void set(String prop, String newValue) {
-		this.PROPS.setProperty(prop, newValue);
+		PROPS.setProperty(prop, newValue);
 	}
 
 	@Override
@@ -67,14 +67,14 @@ public class PluginConfiguration implements Configuration {
 	@Override
 	public void load() {
 		try {
-			if (!this.FILE.exists()) {
-				this.FILE.createNewFile();
-				this.FIRST_TIME_LOAD = true;
+			if (!FILE.exists()) {
+				FILE.createNewFile();
+				FIRST_TIME_LOAD = true;
 			}
-			this.PROPS.load(new FileInputStream(this.FILE));
+			PROPS.load(new FileInputStream(FILE));
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.LOG.error("Could not load configuration file.");
+			LOG.error("Could not load configuration file.");
 		}
 		
 	}
@@ -82,10 +82,10 @@ public class PluginConfiguration implements Configuration {
 	@Override
 	public void save() {
 		try {
-			this.PROPS.store(new FileOutputStream(this.FILE), this.NAME + " v" + this.VERSION +  " Configuration File");
+			PROPS.store(new FileOutputStream(FILE), NAME + " v" + VERSION +  " Configuration File");
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.LOG.error("Could not save configuration file.");
+			LOG.error("Could not save configuration file.");
 		}
 	}
 

@@ -19,43 +19,43 @@ import me.iarekylew00t.ircbot.hooks.types.GenericCommandEvent;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class CommandEvent<T extends PircBotX> extends Event<T> implements GenericChannelUserEvent<T>, GenericCommandEvent<T> {
-	protected final MessageEvent<T> source;
-	protected final User user;
-	protected final Channel channel;
-	protected final Command command;
-	protected final String[] args;
+	protected final MessageEvent<T> SOURCE;
+	protected final User USER;
+	protected final Channel CHANNEL;
+	protected final Command COMMAND;
+	protected final String[] ARGS;
 	
 	public CommandEvent(MessageEvent<T> event, User user, Channel channel, Command command, String[] args) {
 		super(event.getBot());
-		this.source = event;
-		this.user = user;
-		this.channel = channel;
-		this.command = command;
-		this.args = args;
+		SOURCE = event;
+		USER = user;
+		CHANNEL = channel;
+		COMMAND = command;
+		ARGS = args;
 	}
 
 	@Override
 	public User getUser() {
-		return user;
+		return USER;
 	}
 
 	@Override
 	public Channel getChannel() {
-		return channel;
+		return CHANNEL;
 	}
 
 	@Override
 	public Command getCommand() {
-		return command;
+		return COMMAND;
 	}
 
 	@Override
 	public String[] getArgs() {
-		return args;
+		return ARGS;
 	}
 	
 	@Override
 	public void respond(String response) {
-		source.respond(response);
+		SOURCE.respond(response);
 	}
 }

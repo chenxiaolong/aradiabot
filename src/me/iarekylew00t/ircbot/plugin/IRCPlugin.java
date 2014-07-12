@@ -33,20 +33,20 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 	private Logger LOG;
 	
 	public IRCPlugin(String name, String version, String author, String desc) {
-		this.NAME = name;
-		this.VER = version;
-		this.AUTHOR = author;
-		this.DESC = desc;
-		this.PLUGIN_DIR = new File(Aradiabot.getPluginDir(), name);
-		this.CMDS = new ArrayList<Command>();
-		init();
+		NAME = name;
+		VER = version;
+		AUTHOR = author;
+		DESC = desc;
+		PLUGIN_DIR = new File(Aradiabot.getPluginDir(), name);
+		CMDS = new ArrayList<Command>();
+		this.init();
 	}
 	
 	private void init() {
 		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 		PatternLayoutEncoder ple = new PatternLayoutEncoder();
 		
-		ple.setPattern("[%d{HH:mm:ss} %level] [" + this.NAME + "] %msg%n");
+		ple.setPattern("[%d{HH:mm:ss} %level] [" + NAME + "] %msg%n");
 		ple.setContext(lc);
 		ple.start();
 		
@@ -63,7 +63,7 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 		fa.setContext(lc);
 		fa.start();
 		
-		LOG = (Logger) LoggerFactory.getLogger(this.NAME);
+		LOG = (Logger) LoggerFactory.getLogger(NAME);
 		LOG.addAppender(ca);
 		LOG.addAppender(fa);
 		if (Aradiabot.isDebugging()) {
@@ -74,17 +74,17 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 		LOG.setAdditive(false);
 		
 		try {
-			LOG.info("Enabling " + this.NAME + " v" + this.VER);
+			LOG.info("Enabling " + NAME + " v" + VER);
 			if (this.onEnable()) {
-				this.setEnabled(true);
+				setEnabled(true);
 				return;
 			} else {
 				throw new Exception("Error occured when enabling plugin");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error("Disabling "+ this.NAME + " v" + this.VER);
-			this.setEnabled(false);
+			LOG.error("Disabling "+ NAME + " v" + VER);
+			setEnabled(false);
 			try {
 				this.onDisable();
 				return;
@@ -118,23 +118,23 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 			throw new RegisteredCommandException("Command '" + cmd.getName() + "' already registered.");
 		}
 		CommandList.add(cmd);
-		this.CMDS.add(cmd);
+		CMDS.add(cmd);
 	}
 	
 	public void addCommand(String name, String desc, String usage, List<String> aliases, int perm) throws RegisteredCommandException {
-		this.addCommand(new Command(name, desc, usage, aliases, perm));
+		addCommand(new Command(name, desc, usage, aliases, perm));
 	}
 	
 	public void addCommand(String name, String desc, String usage, List<String> aliases) throws RegisteredCommandException {
-		this.addCommand(new Command(name, desc, usage, aliases, IRC.REGULAR));
+		addCommand(new Command(name, desc, usage, aliases, IRC.REGULAR));
 	}
 	
 	public void addCommand(String name, String desc, String usage) throws RegisteredCommandException {
-		this.addCommand(new Command(name, desc, usage, new ArrayList<String>(), IRC.REGULAR));
+		addCommand(new Command(name, desc, usage, new ArrayList<String>(), IRC.REGULAR));
 	}
 	
 	public void addCommand(String name) throws RegisteredCommandException {
-		this.addCommand(new Command(name, "", "$" + name, new ArrayList<String>(), IRC.REGULAR));
+		addCommand(new Command(name, "", "$" + name, new ArrayList<String>(), IRC.REGULAR));
 	}
 	
 	public void removeCommand(Command cmd) throws UnRegisteredCommandException {
@@ -142,35 +142,35 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 			throw new UnRegisteredCommandException("Command '" + cmd.getName() + "' is not registered.");
 		}
 		CommandList.remove(cmd);
-		this.CMDS.remove(cmd);
+		CMDS.remove(cmd);
 	}
 	
 	public String getName() {
-		return this.NAME;
+		return NAME;
 	}
 
 	public String getVersion() {
-		return this.VER;
+		return VER;
 	}
 	
 	public String getAuthor() {
-		return this.AUTHOR;
+		return AUTHOR;
 	}
 	
 	public String getDescription() {
-		return this.DESC;
+		return DESC;
 	}
 	
 	public File getDataFolder() {
-		return this.PLUGIN_DIR;
+		return PLUGIN_DIR;
 	}
 	
 	public List<Command> getCommands() {
-		return this.CMDS;
+		return CMDS;
 	}
 	
 	public Logger getLogger() {
-		return this.LOG;
+		return LOG;
 	}
 	
 	public IRCBot getBot() {
@@ -179,21 +179,21 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 	
 	@Override
 	public String toString() {
-		return this.NAME + " (" + this.VER + ")";
+		return NAME + " (" + VER + ")";
 	}
 	
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof String) {
-			return this.NAME.equals((String) o);
+			return NAME.equals((String) o);
 		} else if (o instanceof IRCPlugin) {
-			return this.NAME.equals(((IRCPlugin) o).getName());
+			return NAME.equals(((IRCPlugin) o).getName());
 		}
 		return false;
 	}
 	
 	@Override
 	public int compareTo(Object o) {
-		return this.NAME.compareTo(((IRCPlugin) o).getName());
+		return NAME.compareTo(((IRCPlugin) o).getName());
 	}
 }

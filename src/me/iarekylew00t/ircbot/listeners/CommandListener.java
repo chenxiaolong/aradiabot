@@ -41,7 +41,7 @@ public class CommandListener extends PluginBase {
 					List<String> args = new ArrayList<String>();
 					Matcher m = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(arr[1]);
 					while (m.find()) {
-						args.add(m.group(1).replaceAll("\"", "").trim());
+						args.add(m.group().replaceAll("\"", "").trim());
 					}
 					Utils.dispatchEvent(e.getBot(), new CommandEvent(e, e.getUser(), e.getChannel(), command, args.toArray(new String[args.size()])));
 				}

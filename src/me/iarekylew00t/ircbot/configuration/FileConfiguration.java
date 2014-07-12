@@ -15,8 +15,8 @@ public class FileConfiguration implements Configuration {
 	private boolean FIRST_TIME_LOAD = false;
 	
 	public FileConfiguration(File file) {
-		this.FILE = file;
-		this.load();
+		FILE = file;
+		load();
 	}
 
 	public FileConfiguration(String file) {
@@ -25,17 +25,17 @@ public class FileConfiguration implements Configuration {
 	
 	@Override
 	public String get(String prop) {
-		return this.PROPS.getProperty(prop);
+		return PROPS.getProperty(prop);
 	}
 
 	@Override
 	public String get(String prop, String defaultVal) {
-		return this.PROPS.getProperty(prop, defaultVal);
+		return PROPS.getProperty(prop, defaultVal);
 	}
 
 	@Override
 	public void set(String prop, String newValue) {
-		this.PROPS.setProperty(prop, newValue);
+		PROPS.setProperty(prop, newValue);
 	}
 
 	@Override
@@ -58,11 +58,11 @@ public class FileConfiguration implements Configuration {
 	@Override
 	public void load() {
 		try {
-			if (!this.FILE.exists()) {
-				this.FILE.createNewFile();
-				this.FIRST_TIME_LOAD = true;
+			if (!FILE.exists()) {
+				FILE.createNewFile();
+				FIRST_TIME_LOAD = true;
 			}
-			this.PROPS.load(new FileInputStream(this.FILE));
+			PROPS.load(new FileInputStream(FILE));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -71,7 +71,7 @@ public class FileConfiguration implements Configuration {
 	@Override
 	public void save() {
 		try {
-			this.PROPS.store(new FileOutputStream(this.FILE), this.FILE.getName() +  " Configuration File");
+			PROPS.store(new FileOutputStream(FILE), FILE.getName() +  " Configuration File");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

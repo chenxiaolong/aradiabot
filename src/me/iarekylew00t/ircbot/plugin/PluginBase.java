@@ -34,15 +34,15 @@ public abstract class PluginBase<T extends PircBotX> implements Listener<T> {
 	private boolean ENABLED = true;
 	
 	public boolean isEnabled() {
-		return this.ENABLED;
+		return ENABLED;
 	}
 	
 	public void setEnabled(boolean val) {
-		this.ENABLED = val;
+		ENABLED = val;
 	}
 	
 	public void onEvent(Event<T> event) throws Exception {
-		if (!this.ENABLED) { return; }
+		if (!ENABLED) { return; }
 		if (event instanceof ActionEvent) {
 			onAction((ActionEvent<T>) event);
 		} else if (event instanceof ChannelInfoEvent) {
