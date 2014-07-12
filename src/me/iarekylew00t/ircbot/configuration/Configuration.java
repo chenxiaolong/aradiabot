@@ -1,4 +1,4 @@
-package me.iarekylew00t.utils;
+package me.iarekylew00t.ircbot.configuration;
 
 /**
  * Basic configuration interface.

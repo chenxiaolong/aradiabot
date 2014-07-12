@@ -1,40 +1,28 @@
-package me.iarekylew00t.ircbot.plugin;
+package me.iarekylew00t.ircbot.configuration;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Properties;
 
-import ch.qos.logback.classic.Logger;
-import me.iarekylew00t.utils.Configuration;
-
 /**
- * Plugin configuration file.
+ * Standard flatfile configuration.
  * @author Kyle Colantonio <IAreKyleW00t kyle10468@gmail.com>
  */
-public class PluginConfiguration implements Configuration {
-	private final String NAME, VERSION;
-	private final File DIR, FILE;
-	private Logger LOG;
+public class FileConfiguration implements Configuration {
+	private File FILE;
 	private Properties PROPS = new Properties();
 	private boolean FIRST_TIME_LOAD = false;
 	
-	public PluginConfiguration(IRCPlugin plugin, String config) {
-		this.NAME = plugin.getName();
-		this.VERSION = plugin.getVersion();
-		this.DIR = new File("./plugins/" + plugin.getName());
-		this.FILE = new File("./plugins/" + plugin.getName() + "/" + config);
-		this.LOG = plugin.getLogger();
-		if (!this.DIR.exists()) {
-			this.DIR.mkdir();
-		}
+	public FileConfiguration(File file) {
+		this.FILE = file;
 		this.load();
 	}
-	
-	public PluginConfiguration(IRCPlugin plugin) {
-		this(plugin, "config.ini");
-	}
 
+	public FileConfiguration(String file) {
+		this(new File(file));
+	}
+	
 	@Override
 	public String get(String prop) {
 		return this.PROPS.getProperty(prop);
@@ -60,7 +48,7 @@ public class PluginConfiguration implements Configuration {
 		this.save();
 		this.load();
 	}
-	
+
 	@Override
 	public void reload() {
 		this.load();
@@ -77,19 +65,15 @@ public class PluginConfiguration implements Configuration {
 			this.PROPS.load(new FileInputStream(this.FILE));
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.LOG.error("Could not load configuration file.");
 		}
-		
 	}
 
 	@Override
 	public void save() {
 		try {
-			this.PROPS.store(new FileOutputStream(this.FILE), this.NAME + " v" + this.VERSION +  " Configuration File");
+			this.PROPS.store(new FileOutputStream(this.FILE), this.FILE.getName() +  " Configuration File");
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.LOG.error("Could not save configuration file.");
 		}
 	}
-
 }

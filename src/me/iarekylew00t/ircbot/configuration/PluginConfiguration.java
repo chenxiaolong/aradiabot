@@ -1,28 +1,37 @@
-package me.iarekylew00t.utils;
+package me.iarekylew00t.ircbot.configuration;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Properties;
 
+import ch.qos.logback.classic.Logger;
+import me.iarekylew00t.ircbot.plugin.IRCPlugin;
+
 /**
- * Standard flatfile configuration.
+ * Plugin configuration file.
  * @author Kyle Colantonio <IAreKyleW00t kyle10468@gmail.com>
  */
-public class FileConfiguration implements Configuration {
-	private File FILE;
+public class PluginConfiguration implements Configuration {
+	private final String NAME, VERSION;
+	private final File FILE;
+	private Logger LOG;
 	private Properties PROPS = new Properties();
 	private boolean FIRST_TIME_LOAD = false;
 	
-	public FileConfiguration(File file) {
-		this.FILE = file;
+	public PluginConfiguration(IRCPlugin plugin, String config) {
+		this.NAME = plugin.getName();
+		this.VERSION = plugin.getVersion();
+		this.FILE = new File("./plugins/" + plugin.getName() + "/" + config);
+		plugin.getDataFolder().mkdir();
+		this.LOG = plugin.getLogger();
 		this.load();
 	}
-
-	public FileConfiguration(String file) {
-		this(new File(file));
-	}
 	
+	public PluginConfiguration(IRCPlugin plugin) {
+		this(plugin, "config.ini");
+	}
+
 	@Override
 	public String get(String prop) {
 		return this.PROPS.getProperty(prop);
@@ -48,7 +57,7 @@ public class FileConfiguration implements Configuration {
 		this.save();
 		this.load();
 	}
-
+	
 	@Override
 	public void reload() {
 		this.load();
@@ -65,15 +74,19 @@ public class FileConfiguration implements Configuration {
 			this.PROPS.load(new FileInputStream(this.FILE));
 		} catch (Exception e) {
 			e.printStackTrace();
+			this.LOG.error("Could not load configuration file.");
 		}
+		
 	}
 
 	@Override
 	public void save() {
 		try {
-			this.PROPS.store(new FileOutputStream(this.FILE), this.FILE.getName() +  " Configuration File");
+			this.PROPS.store(new FileOutputStream(this.FILE), this.NAME + " v" + this.VERSION +  " Configuration File");
 		} catch (Exception e) {
 			e.printStackTrace();
+			this.LOG.error("Could not save configuration file.");
 		}
 	}
+
 }
