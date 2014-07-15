@@ -76,7 +76,7 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 		try {
 			LOG.info("Enabling " + NAME + " v" + VER);
 			if (this.onEnable()) {
-				setEnabled(true);
+				this.setEnabled(true);
 				return;
 			} else {
 				throw new Exception("Error occured when enabling plugin");
@@ -84,7 +84,7 @@ public abstract class IRCPlugin extends PluginBase implements Comparable {
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOG.error("Disabling "+ NAME + " v" + VER);
-			setEnabled(false);
+			this.setEnabled(false);
 			try {
 				this.onDisable();
 				return;

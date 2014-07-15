@@ -26,7 +26,7 @@ public class InternalCommandListener extends PluginBase {
 	public InternalCommandListener() {
 		CommandList.add(new Command("version", "Displays the current version of Aradiabot.", "$version", Arrays.asList("ver"), IRC.REGULAR));
 		CommandList.add(new Command("plugins", "Displays the list of all plugins. Green indicates a working plugin, red indicates an error.", "$plugins [page]", Arrays.asList("pl"), IRC.REGULAR));
-		CommandList.add(new Command("commands", "Displays a list of all commands.", "$commands [page]", Arrays.asList("cmd"), IRC.REGULAR));
+		CommandList.add(new Command("commands", "Displays a list of all commands.", "$commands [page]", Arrays.asList("cmd", "cmds"), IRC.REGULAR));
 		CommandList.add(new Command("help", "Displays all information of a given command including the description, usage, and the required permission. Arguments written with <this> are required, [these] are optional.", "$help [command]"));
 		CommandList.add(new Command("alias", "Displays all aliases of a command.", "$alias <command>"));
 		CommandList.add(new Command("shutdown", "Disables all plugins and stops the bot.", "$shutdown", Arrays.asList("stop", "exit"), IRC.OP));
@@ -118,7 +118,7 @@ public class InternalCommandListener extends PluginBase {
 				String cmd = args[0];
 				if (CommandList.contains(cmd)) {
 					Command c = CommandList.get(cmd);
-					channel.send().message("[" + IRC.permissionToString(c.getPermission()) + "] " + c.getDescription() + " Usage: " + c.getUsage());
+					channel.send().message("[" + IRC.permissionToString(c.getPermission()) + "] " + c.getDescription() + " - Usage: " + c.getUsage());
 				} else {
 					channel.send().message(Colors.RED + Colors.BOLD + "\"" + cmd + "\" is not a valid command. Use $commands for a list of all available commands.");
 				}

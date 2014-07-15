@@ -42,6 +42,7 @@ public class Main {
 			System.exit(1);
 			return;
 		}
+		
 		Configuration<IRCBot> botConfig = new Configuration.Builder<IRCBot>()
 			.setEncoding(Charset.forName(CONFIG.get("charset", "UTF-8")))
 			.setAutoNickChange(true)
@@ -55,7 +56,7 @@ public class Main {
 			.buildConfiguration();
 		IRCBot bot = new IRCBot(botConfig);
 		bot.setDebug(Boolean.parseBoolean(CONFIG.get("debug", "false")));
-		/* Load all plugins here */
+		/* Plugins go here*/
 		try {
 			bot.startBot();
 		} catch (IOException e) {
@@ -96,12 +97,6 @@ public class Main {
 		
 		LOG.addAppender(cAppender);
 		LOG.addAppender(fAppender);
-		if (Boolean.parseBoolean(CONFIG.get("debug", "false"))) {
-			LOG.setLevel(Level.DEBUG);
-			LOG.debug("===== DEBUGGING MODE ENABLED =====");
-		} else {
-			LOG.setLevel(Level.INFO);
-		}
-		LOG.setAdditive(false);
+		LOG.setLevel(Boolean.parseBoolean(CONFIG.get("debug", "false")) ? Level.DEBUG : Level.INFO);
 	}
 }
