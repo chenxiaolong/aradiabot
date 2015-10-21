@@ -34,8 +34,7 @@ import sh.yle.k.ircbot.configuration.FlatFileConfiguration;
 
 /**
  * Main class used to start the entire IRC bot.
- * Initial configuration takes place here and then moves towards
- * Aradiabots after plugins are loaded.
+ * Initial configuration takes place here.
  * 
  * @author Kyle Colantonio <kyle10468@gmail.com>
  **/
@@ -49,7 +48,7 @@ public class Main {
 	 **/
 	public static void main(String[] args) throws Exception {
 		initLogger();
-		log.info("Starting " + IRCBot.NAME + " v" + IRCBot.VERSION + " ...");
+		log.info("Starting " + Aradiabot.NAME + " v" + IRCBot.VERSION + " ...");
 		
 		/* Load Configuration */
 		if (!config.load()) {
@@ -84,6 +83,7 @@ public class Main {
 		/* Create and start the new bot */
 		IRCBot bot = new IRCBot(bConfig);
 		bot.debug(Boolean.parseBoolean(config.get("debug", "false")));
+		Aradiabot.setBot(bot); //Save singleton bot
 		try {
 			bot.startBot();
 		} catch (IOException e) { //Connection error

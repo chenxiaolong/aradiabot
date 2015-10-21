@@ -20,8 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Memory-based configuration. All settings are sorted in memory
+ * Memory-based configuration. All settings are stored in memory
  * and will be permenantly cleared when the program terminates.
+ * 
  * @author Kyle Colantonio <kyle10468@gmail.com>
  **/
 public class MemoryConfiguration implements Configuration {

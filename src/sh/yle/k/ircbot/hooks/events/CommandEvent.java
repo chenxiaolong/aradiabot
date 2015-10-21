@@ -29,8 +29,9 @@ import sh.yle.k.ircbot.command.Command;
 import sh.yle.k.ircbot.hooks.types.GenericCommandEvent;
 
 /**
- * Command Event that is called whenever a command is issued in a
- * channel the bot is present in.
+ * Command Event that is called whenever the CommandListener
+ * detects that a command has been issued in a channel
+ * the bot is connected to.
  * 
  * @author Kyle Colantonio <kyle10468@gmail.com>
  **/

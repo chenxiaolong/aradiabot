@@ -14,38 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
-package sh.yle.k.ircbot.command;
+package sh.yle.k.ircbot.plugin;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import sh.yle.k.ircbot.IRCBot;
+
 /**
  * A slightly modified ArrayList that includes methods to
- * help improve Command storage.
+ * help improve IRCPlugin storage.
  * 
  * @author Kyle Colantonio <kyle10468@gmail.com>
  **/
-public class CommandList extends ArrayList<Command> {
-	private static final long serialVersionUID = -6476761547212818778L;
-	
+public class PluginList extends ArrayList<IRCPlugin<IRCBot>> {
+	private static final long serialVersionUID = 2541945757774840550L;
+
 	/**
-	 * Attempts to search for a command within the List.
+	 * Attempts to search for a plugin within the List.
 	 * This will also search against aliases.
 	 * 
-	 * Returns null if a command is not found.
+	 * Returns null if a plugin is not found.
 	 **/
-	public Command find(String command) {
+	public IRCPlugin<IRCBot> find(String plugin) {
 		/* Search commands */
-		for (Command cmd : this) {
-			if (cmd.getName().equals(command)) {
-				return cmd;
-			} else {
-				/* Search aliases */
-				for (String alias : cmd.getAliases()) {
-					if (alias.equals(command)) {
-						return cmd;
-					}
-				}
+		for (IRCPlugin<IRCBot> pl : this) {
+			if (pl.getName().equals(plugin)) {
+				return pl;
 			}
 		}
 		return null;
@@ -53,13 +48,13 @@ public class CommandList extends ArrayList<Command> {
 	
 	/**
 	 * Sorts the List using JDK sort(Comparator<T>). We
-	 * compare Command names so they are sorted alphabetically.
+	 * compare IRCPlugin names so they are sorted alphabetically.
 	 **/
 	public void sort() {
-		this.sort(new Comparator<Command>() {
+		this.sort(new Comparator<IRCPlugin<IRCBot>>() {
 			@Override
-			public int compare(Command cmd1, Command cmd2) {
-				return cmd1.getName().compareTo(cmd2.getName());
+			public int compare(IRCPlugin<IRCBot> pl1, IRCPlugin<IRCBot> pl2) {
+				return pl1.getName().compareTo(pl2.getName());
 			}
 		});
 	}

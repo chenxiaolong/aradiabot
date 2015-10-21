@@ -16,76 +16,83 @@
  **/
 package sh.yle.k.ircbot.command;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import org.apache.commons.lang3.Validate;
 
 import sh.yle.k.ircbot.IRC;
 
-public class Command implements Comparable<Command> {
+/**
+ * Command object used to hold all information related
+ * to commands. All data is final once set and should not
+ * be changed once created.
+ * 
+ * @author Kyle Colantonio <kyle10468@gmail.com>
+ **/
+public class Command {
 	private final String name, description, usage;
-	private final List<String> aliases;
+	private final String[] aliases;
 	private final IRC.Permission permission;
 	
-	public Command(String name) {
-		this(name, "", IRC.COMMAND_CHARACTER + name, null, IRC.Permission.REGULAR);
-	}
-	
-	public Command(String name, String description, String usage) {
-		this(name, description, usage, null, IRC.Permission.REGULAR);
-	}
-	
-	public Command(String name, String description, String usage, List<String> aliases) {
-		this(name, description, usage, aliases, IRC.Permission.REGULAR);
-	}
-	
-	public Command(String name, String description, String usage, List<String> aliases, IRC.Permission permission) {
+	/**
+	 * Command Constructor that will save keep track of corresponding
+	 * command information. These values are final and should not
+	 * be modified after being set.
+	 **/
+	public Command(final String name, final String description, final String usage, final String[] aliases, final IRC.Permission permission) {
+		Validate.matchesPattern(name, "^[a-zA-Z]+.*$", "'%s' cannot start with a number", name);
 		this.name = name;
 		this.description = description;
 		this.usage = usage;
-		if (aliases == null) {
-			this.aliases = new ArrayList<String>();
-		} else {
-			this.aliases = new ArrayList<String>(aliases);
-		}
+		this.aliases = aliases;
 		this.permission = permission;
 	}
 	
+	/**
+	 * Returns the name of the command. This is what the
+	 * actual command is.
+	 **/
 	public final String getName() {
 		return name;
 	}
 	
+	/**
+	 * Returns a basic description of the command.
+	 **/
 	public final String getDescription() {
 		return description;
 	}
 	
+	/**
+	 * Returns the usage of the command.
+	 * ie: command <required> [optional]
+	 **/
 	public final String getUsage() {
 		return usage;
 	}
 	
-	public final List<String> getAliases() {
-		return Collections.unmodifiableList(aliases);
+	/**
+	 * Returns an Array of aliases for the command.
+	 * These will normally never be reference since
+	 * aliases will be handled internally.
+	 **/
+	public final String[] getAliases() {
+		return aliases;
 	}
 	
+	/**
+	 * Returns the minimum required permission that is
+	 * need to successfully execute the command. Insufficient
+	 * permissions will be handled internally.
+	 **/
 	public final IRC.Permission getPermission() {
 		return permission;
 	}
 	
+	/**
+	 * Returns the String representation of the Command
+	 * which will always be the name.
+	 **/
 	@Override
-	public boolean equals(Object o) {
-		if (o instanceof String) {
-			String str = (String) o;
-			return name.equals(str);
-		} else if (o instanceof Command) {
-			Command cmd = (Command) o;
-			return name.equals(cmd.getName());
-		} else {
-			return name.equals(o.toString());
-		}
-	}
-	
-	@Override
-	public int compareTo(Command command) {
-		return name.compareTo(command.getName());
+	public String toString() {
+		return name;
 	}
 }

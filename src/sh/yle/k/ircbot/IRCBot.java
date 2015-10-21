@@ -25,6 +25,8 @@ import org.pircbotx.User;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
+import sh.yle.k.ircbot.command.CommandList;
+import sh.yle.k.ircbot.plugin.PluginList;
 
 /**
  * Main IRC bot class that overrides the original PircBotX class.
@@ -34,10 +36,9 @@ import ch.qos.logback.classic.Logger;
  * @author Kyle Colantonio <kyle10468@gmail.com>
  **/
 public class IRCBot extends PircBotX {
-	public static final String NAME = "Aradiabot";
-	public static final String VERSION = "1.0.0";
-	public static final String API_VERSION = "2.0.1";
-	private final File plugins = new File("./plugins");
+	private final File pluginDirectory = new File("./plugins");
+	private final CommandList commands = new CommandList();
+	private final PluginList plugins = new PluginList();
 	private boolean debug = false;
 	private final Logger log = (Logger)LoggerFactory.getLogger(IRCBot.class);
 
@@ -48,15 +49,13 @@ public class IRCBot extends PircBotX {
 	 **/
 	public IRCBot(Configuration<? extends IRCBot> configuration) {
 		super(configuration);
-		Aradiabot.setBot(this); //Save our singleton bot
 		
 		/* Check if plugin directory exists */
-		if (!plugins.exists()) {
-			plugins.mkdirs();
+		if (!pluginDirectory.exists()) {
+			pluginDirectory.mkdirs();
 		}
 		
 		/* Add internal Event Listeners */
-		//TODO
 	}
 	
 	/**
@@ -64,9 +63,8 @@ public class IRCBot extends PircBotX {
 	 * bot from all servers.
 	 **/
 	public void shutdown() {
-		log.info("Shutting down " + IRCBot.NAME + " ...");
+		log.info("Shutting down " + Aradiabot.NAME + " ...");
 		/* Disable all loaded plugins */
-		//TODO
 		this.stopBotReconnect();
 		this.shutdown(true);
 		System.exit(IRC.EXIT_SUCCESS);
@@ -261,30 +259,25 @@ public class IRCBot extends PircBotX {
 	}
 	
 	/**
-	 * Returns the name of the IRC bot.
-	 **/
-	public final String getName() {
-		return NAME;
-	}
-	
-	/**
-	 * Returns the internal version of the IRC bot.
-	 **/
-	public final String getVersion() {
-		return VERSION;
-	}
-	
-	/**
-	 * Retruns the PircBotX API version.
-	 **/
-	public final String getAPIVersion() {
-		return API_VERSION;
-	}
-	
-	/**
 	 * Returns the plugin directory File.
 	 **/
 	public final File getPluginDir() {
+		return pluginDirectory;
+	}
+	
+	/**
+	 * Return the list of Commands that are
+	 * loaded into the bot.
+	 **/
+	public final CommandList getCommands() {
+		return commands;
+	}
+	
+	/**
+	 * Return the list of IRCPlugins that are
+	 * loaded into the bot.
+	 **/
+	public final PluginList getPlugins() {
 		return plugins;
 	}
 

@@ -20,8 +20,7 @@ import sh.yle.k.ircbot.IRCBot;
 import sh.yle.k.ircbot.command.Command;
 
 /**
- * Generic Command Event interface that is called when
- * certain onMessage events are triggered.
+ * Generic Command Event Interface.
  * 
  * @author Kyle Colantonio <kyle10468@gmail.com>
  **/

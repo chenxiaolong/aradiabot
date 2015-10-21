@@ -17,11 +17,22 @@
 package sh.yle.k.ircbot;
 
 import java.io.File;
+
 import org.pircbotx.Channel;
 import org.pircbotx.User;
 import ch.qos.logback.classic.Logger;
+import sh.yle.k.ircbot.command.CommandList;
 
+/**
+ * Aradiabot singleteon used to control the main IRCBot
+ * outside of an accessible scope.
+ * 
+ * @author Kyle Colantonio <kyle10468@gmail.com>
+ **/
 public final class Aradiabot {
+	public static final String NAME = "Aradiabot";
+	public static final String VERSION = "1.0.0";
+	public static final String API_VERSION = "2.0.1";
 	private static IRCBot bot;
 	
 	public static final void setBot(IRCBot ircbot) {
@@ -29,43 +40,15 @@ public final class Aradiabot {
 			throw new UnsupportedOperationException("Cannot redefine singleton IRC bot.");
 		}
 		bot = ircbot;
-		bot.getLogger().info("This bot is running " + bot.getName() + " version " + bot.getVersion() + " (PircBotX API version " + bot.getAPIVersion() + ")");
+		bot.getLogger().info("This bot is running " + NAME + " version " + VERSION + " (PircBotX API version " + API_VERSION + ")");
 	}
 	
 	public static final IRCBot getBot() {
 		return bot;
 	}
 	
-	public static final String getName() {
-		return bot.getName();
-	}
-	
-	public static final String getNick() {
-		return bot.getNick();
-	}
-	
-	public static final String getVersion() {
-		return bot.getVersion();
-	}
-	
-	public static final String getAPIVersion() {
-		return bot.getAPIVersion();
-	}
-	
-	public static final File getPluginDir() {
-		return bot.getPluginDir();
-	}
-	
 	public static final int getBotId() {
 		return bot.getBotId();
-	}
-	
-	public static final boolean isDebugging() {
-		return bot.isDebugging();
-	}
-	
-	public static final void debug(boolean value) {
-		bot.debug(value);
 	}
 	
 	public static final String getServer() {
@@ -76,12 +59,32 @@ public final class Aradiabot {
 		return bot.getConfiguration().getServerPort();
 	}
 	
+	public static final String getNick() {
+		return bot.getNick();
+	}
+	
+	public static final File getPluginDir() {
+		return bot.getPluginDir();
+	}
+	
 	public static final Logger getLogger() {
 		return bot.getLogger();
 	}
 	
 	public static final void shutdown() {
 		bot.shutdown();
+	}
+	
+	public static final CommandList getCommands() {
+		return bot.getCommands();
+	}
+	
+	public static final boolean isDebugging() {
+		return bot.isDebugging();
+	}
+	
+	public static final void debug(boolean value) {
+		bot.debug(value);
 	}
 
 	public synchronized void sendToTarget(String target, String message, IRC.Event type) {

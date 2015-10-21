@@ -21,8 +21,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Properties;
 
+import org.apache.commons.lang3.Validate;
+
 /**
- * Generic flatfile configuration class.
+ * Generic flatfile configuration. All settings are stored
+ * on disk so they can be referenced later after the
+ * program has been terminated.
+ * 
  * @author Kyle Colantonio <kyle10468@gmail.com>
  **/
 public class FlatFileConfiguration implements Configuration {
@@ -30,20 +35,12 @@ public class FlatFileConfiguration implements Configuration {
 	private Properties properties = new Properties();
 	
 	/**
-	 * FileConfiguration Constructor that takes
-	 * a File as input and then attempts to load
-	 * the properties from said file.
+	 * FileConfiguration Constructor saves the
+	 * configuration to a new File on disk.
 	 **/
-	public FlatFileConfiguration(File file) {
-		this.file = file;
-	}
-	
-	/**
-	 * Default FileConfiguration Constructor
-	 * that calls FileConfiguration(File).
-	 **/
-	public FlatFileConfiguration(String file) {
-		this(new File(file));
+	public FlatFileConfiguration(final String file) {
+		Validate.notNull(file, "Configuration file cannot be null");
+		this.file = new File(file);
 	}
 	
 	/**
@@ -131,5 +128,14 @@ public class FlatFileConfiguration implements Configuration {
 			return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * Returns the file on disk the configuration is saved to.
+	 * If any modifications are made, you must call load() again
+	 * in order for these changes to take affect in memory.
+	 **/
+	public final File getConfigFile() {
+		return file;
 	}
 }

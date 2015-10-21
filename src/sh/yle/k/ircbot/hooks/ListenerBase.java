@@ -12,6 +12,12 @@ import sh.yle.k.ircbot.command.Command;
 import sh.yle.k.ircbot.hooks.events.*;
 import sh.yle.k.ircbot.hooks.types.*;
 
+/**
+ * The base for any Event Listener in the IRCBot including
+ * the custom CommandEvent.
+ * 
+ * @author Kyle Colantonio <kyle10468@gmail.com>
+ **/
 public abstract class ListenerBase<T extends IRCBot> implements Listener<T> {
 	private boolean enabled = true; //Enabled by default
 	

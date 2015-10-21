@@ -17,7 +17,8 @@
 package sh.yle.k.ircbot.configuration;
 
 /**
- * Basic configuration interface.
+ * Generic Configuration Interface.
+ * 
  * @author Kyle Colantonio <kyle10468@gmail.com>
  **/
 public interface Configuration {
