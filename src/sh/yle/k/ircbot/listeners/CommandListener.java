@@ -60,17 +60,19 @@ public class CommandListener<T extends IRCBot> extends ListenerBase<T> {
 		
 		/* Only if commands start with IRC.COMMAND_CHARACTER but aren't empty
 		 * ie: "$command" would be valid, but "$" would not. */
-		if (raw.startsWith(IRC.COMMAND_CHARACTER) && raw.equals(IRC.COMMAND_CHARACTER)) {
+		if (raw.startsWith(IRC.COMMAND_CHARACTER) && !raw.equals(IRC.COMMAND_CHARACTER)) {
 			String[] arr = raw.split(" ", 2); //Split raw input
 			String cmdStr = arr[0].substring(1).toLowerCase(); //Parse command
 			
 			/* Ignore commands that start with a number */
 			if (cmdStr.matches("^[0-9]+.*$")) return;
 			
+			/* Log command */
+			Aradiabot.getLogger().info(user.getNick() + " issued command: " + cmdStr);
+
 			/* Only work with valid commands */
 			Command command = Aradiabot.getCommands().find(cmdStr);
 			if (command != null) {
-				Aradiabot.getLogger().info(user.getNick() + " issued command: " + cmdStr); //Log command
 				if (arr.length <= 1) {
 					/* Dispatch a new CommandEvent with no arguments */
 					Utils.dispatchEvent(event.getBot(), new CommandEvent<T>(event, user, channel, command, new String[0]));

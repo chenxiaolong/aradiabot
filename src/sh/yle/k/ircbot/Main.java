@@ -48,8 +48,8 @@ public class Main {
 	 **/
 	public static void main(String[] args) throws Exception {
 		initLogger();
-		log.info("Starting " + Aradiabot.NAME + " v" + IRCBot.VERSION + " ...");
-		
+		log.info("Starting " + Aradiabot.NAME + " v" + Aradiabot.VERSION + " ...");
+
 		/* Load Configuration */
 		if (!config.load()) {
 			config.create();
@@ -59,7 +59,7 @@ public class Main {
 				  .set("server", "irc.esper.net")
 				  .set("port", "6667")
 				  .set("serverPassword", "")
-				  .set("channels", "")
+				  .set("channels", "#channel1,#channel2,#channel3")
 				  .set("charset", "UTF-8")
 				  .set("debug", "false")
 				  .save();
@@ -67,23 +67,28 @@ public class Main {
 			System.exit(IRC.EXIT_FAILURE);
 		}
 		
+		/* Set Logging Level */
+		log.setLevel(Boolean.parseBoolean(config.get("debug")) ? Level.DEBUG : Level.INFO);
+		
 		/* Set Configuration for bot */
 		Configuration<IRCBot> bConfig = new Configuration.Builder<IRCBot>()
 				.setEncoding(Charset.forName(config.get("charset", "UTF-8")))
 				.setAutoNickChange(true)
 				.setAutoReconnect(true)
 				.setMessageDelay(0)
-				.setLogin(config.get("login", "PircBotX"))
-				.setName(config.get("nickname", "Aradiabot"))
+				.setLogin(config.get("login"))
+				.setName(config.get("nickname"))
 				.setNickservPassword(config.get("password"))
-				.setServer(config.get("server", "irc.esper.net"), Integer.parseInt(config.get("port", "6667")), config.get("serverPassword"))
+				.setServer(config.get("server"), Integer.parseInt(config.get("port")), config.get("serverPassword"))
 				.addAutoJoinChannel(config.get("channels"))
+				.setVersion(Aradiabot.VERSION)
 				.buildConfiguration();
 		
 		/* Create and start the new bot */
 		IRCBot bot = new IRCBot(bConfig);
-		bot.debug(Boolean.parseBoolean(config.get("debug", "false")));
+		bot.debug(Boolean.parseBoolean(config.get("debug")));
 		Aradiabot.setBot(bot); //Save singleton bot
+		
 		try {
 			bot.startBot();
 		} catch (IOException e) { //Connection error
@@ -93,8 +98,7 @@ public class Main {
 			log.error("Could not start bot. Please check your config and internet connection.");
 			System.exit(IRC.EXIT_FAILURE);
 		} catch (Exception e) { //Unknown error
-			log.error("Unexpected error occured when starting bot. Please check your config and internet connection.\n"
-					+ "If this issue continues, please report it https://github.com/IAreKyleW00t/aradiabot/issues.");
+			log.error("Unexpected error occured when starting bot; " + e.toString());
 			System.exit(IRC.EXIT_FAILURE);
 		}
 		
@@ -134,6 +138,5 @@ public class Main {
 		/* Update ROOT Logger */
 		log.addAppender(console);
 		log.addAppender(file);
-		log.setLevel(Boolean.parseBoolean(config.get("debug", "false")) ? Level.DEBUG : Level.INFO);
 	}
 }

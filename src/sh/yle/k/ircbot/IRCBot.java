@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 import sh.yle.k.ircbot.command.CommandList;
+import sh.yle.k.ircbot.listeners.CommandListener;
 import sh.yle.k.ircbot.plugin.PluginList;
 
 /**
@@ -40,7 +41,7 @@ public class IRCBot extends PircBotX {
 	private final CommandList commands = new CommandList();
 	private final PluginList plugins = new PluginList();
 	private boolean debug = false;
-	private final Logger log = (Logger)LoggerFactory.getLogger(IRCBot.class);
+	private final Logger log = (Logger) LoggerFactory.getLogger(IRCBot.class);
 
 	/**
 	 * IRCBot Constructor based on the PircBotX Constructor.
@@ -56,6 +57,7 @@ public class IRCBot extends PircBotX {
 		}
 		
 		/* Add internal Event Listeners */
+		this.getConfiguration().getListenerManager().addListener(new CommandListener<IRCBot>());
 	}
 	
 	/**
@@ -63,7 +65,7 @@ public class IRCBot extends PircBotX {
 	 * bot from all servers.
 	 **/
 	public void shutdown() {
-		log.info("Shutting down " + Aradiabot.NAME + " ...");
+		log.info("Shutting down " + Aradiabot.NAME + " v" + Aradiabot.VERSION +" ...");
 		/* Disable all loaded plugins */
 		this.stopBotReconnect();
 		this.shutdown(true);

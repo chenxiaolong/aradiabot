@@ -41,6 +41,9 @@ public final class Aradiabot {
 		}
 		bot = ircbot;
 		bot.getLogger().info("This bot is running " + NAME + " version " + VERSION + " (PircBotX API version " + API_VERSION + ")");
+		if (bot.isDebugging()) {
+			bot.getLogger().debug("Debugging has been enabled!");
+		}
 	}
 	
 	public static final IRCBot getBot() {
