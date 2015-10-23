@@ -16,16 +16,17 @@
  **/
 package sh.yle.k.ircbot.command;
 
-import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * A slightly modified ArrayList that includes methods to
- * help improve Command storage.
+ * A slightly modified CopyOnWriteArrayList that includes methods to
+ * help improve Command storage. We need to use CopyOnWriteArrayList
+ * in order to avoid concurrency issues.
  * 
  * @author Kyle Colantonio <kyle10468@gmail.com>
  **/
-public class CommandList extends ArrayList<Command> {
+public class CommandList extends CopyOnWriteArrayList<Command> {
 	private static final long serialVersionUID = -6476761547212818778L;
 	
 	/**

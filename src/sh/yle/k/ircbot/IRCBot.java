@@ -18,6 +18,7 @@ package sh.yle.k.ircbot;
 
 import java.io.File;
 
+import org.apache.commons.lang3.Validate;
 import org.pircbotx.Channel;
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
@@ -27,6 +28,8 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import sh.yle.k.ircbot.command.CommandList;
 import sh.yle.k.ircbot.listeners.CommandListener;
+import sh.yle.k.ircbot.listeners.InternalCommandListener;
+import sh.yle.k.ircbot.plugin.IRCPlugin;
 import sh.yle.k.ircbot.plugin.PluginList;
 
 /**
@@ -38,9 +41,8 @@ import sh.yle.k.ircbot.plugin.PluginList;
  **/
 public class IRCBot extends PircBotX {
 	private final File pluginDirectory = new File("./plugins");
-	private final CommandList commands = new CommandList();
-	private final PluginList plugins = new PluginList();
-	private boolean debug = false;
+	private final CommandList commands;
+	private final PluginList plugins;
 	private final Logger log = (Logger) LoggerFactory.getLogger(IRCBot.class);
 
 	/**
@@ -51,13 +53,37 @@ public class IRCBot extends PircBotX {
 	public IRCBot(Configuration<? extends IRCBot> configuration) {
 		super(configuration);
 		
+		/* Save singleton bot. If you need another instance
+		 * of an IRCBot running, you will need to run a
+		 * separate program with its own Configuration and Plugins. */
+		Aradiabot.setBot(this);
+		
 		/* Check if plugin directory exists */
 		if (!pluginDirectory.exists()) {
 			pluginDirectory.mkdirs();
 		}
 		
+		/* Initialize CommandList and PluginList */
+		commands = new CommandList();
+		plugins = new PluginList();
+		
 		/* Add internal Event Listeners */
 		this.getConfiguration().getListenerManager().addListener(new CommandListener<IRCBot>());
+		this.getConfiguration().getListenerManager().addListener(new InternalCommandListener<IRCBot>());
+	}
+	
+	public void addPlugin(IRCPlugin plugin) {
+		Validate.notNull(plugin, "Cannot add a null plugin");
+		this.getConfiguration().getListenerManager().addListener(plugin);
+		plugins.add(plugin);
+		plugin.setEnabled(true);
+	}
+	
+	public void removePlugin(IRCPlugin plugin) {
+		Validate.notNull(plugin, "Cannot add a null plugin");
+		this.getConfiguration().getListenerManager().addListener(plugin);
+		plugins.remove(plugin);
+		plugin.setEnabled(false);
 	}
 	
 	/**
@@ -65,11 +91,27 @@ public class IRCBot extends PircBotX {
 	 * bot from all servers.
 	 **/
 	public void shutdown() {
+		
 		log.info("Shutting down " + Aradiabot.NAME + " v" + Aradiabot.VERSION +" ...");
 		/* Disable all loaded plugins */
+		for (IRCPlugin pl : plugins) {
+			try {
+				log.info("Disabling " + pl.getName() + " v" + pl.getVersion() + " ...");
+				if (!pl.onDisable()) {
+					log.error("Failed to disable " + pl.getName() + " v" + pl.getVersion() + "; returned false. Continuing...");
+				}
+			} catch (Exception e) {
+				log.error(e.toString());
+				log.error("Fatal error occured while disabling " + pl.getName() + " v" + pl.getVersion());
+				System.exit(IRC.EXIT_FAILURE);
+			}
+			this.removePlugin(pl);
+		}
+
+		/* Disconnect from the server before
+		 * we being out shutdown process. */
 		this.stopBotReconnect();
 		this.shutdown(true);
-		System.exit(IRC.EXIT_SUCCESS);
 	}
 	
 	/**
@@ -281,21 +323,6 @@ public class IRCBot extends PircBotX {
 	 **/
 	public final PluginList getPlugins() {
 		return plugins;
-	}
-
-	/**
-	 * Determines whether the IRC bot has debugging
-	 * enabled or not.
-	 **/
-	public boolean isDebugging() {
-		return debug;
-	}
-	
-	/**
-	 * Changes the IRC bot's debugging value.
-	 **/
-	public void debug(boolean value) {
-		debug = value;
 	}
 	
 	/**

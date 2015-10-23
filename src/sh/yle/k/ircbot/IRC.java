@@ -26,7 +26,6 @@ import org.pircbotx.User;
  **/
 public final class IRC {
 	public static final int EXIT_SUCCESS = 0, EXIT_FAILURE = 1;
-	public static final String COMMAND_CHARACTER = "$";
 	
 	/**
 	 * IRC Permission levels

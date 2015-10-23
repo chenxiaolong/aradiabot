@@ -38,7 +38,7 @@ public class Command {
 	 * be modified after being set.
 	 **/
 	public Command(final String name, final String description, final String usage, final String[] aliases, final IRC.Permission permission) {
-		Validate.matchesPattern(name, "^[a-zA-Z]+.*$", "'%s' cannot start with a number", name);
+		Validate.matchesPattern(name, "^[a-zA-Z]+.*", "'%s' cannot start with a number", name);
 		this.name = name;
 		this.description = description;
 		this.usage = usage;

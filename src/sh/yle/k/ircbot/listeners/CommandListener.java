@@ -28,7 +28,6 @@ import org.pircbotx.Utils;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import sh.yle.k.ircbot.Aradiabot;
-import sh.yle.k.ircbot.IRC;
 import sh.yle.k.ircbot.IRCBot;
 import sh.yle.k.ircbot.command.Command;
 import sh.yle.k.ircbot.hooks.ListenerBase;
@@ -58,14 +57,11 @@ public class CommandListener<T extends IRCBot> extends ListenerBase<T> {
 		User user = event.getUser();
 		Channel channel = event.getChannel();
 		
-		/* Only if commands start with IRC.COMMAND_CHARACTER but aren't empty
+		/* Only if commands start with $ but aren't empty
 		 * ie: "$command" would be valid, but "$" would not. */
-		if (raw.startsWith(IRC.COMMAND_CHARACTER) && !raw.equals(IRC.COMMAND_CHARACTER)) {
+		if (raw.matches("^\\$[a-zA-Z]+.*")) {
 			String[] arr = raw.split(" ", 2); //Split raw input
-			String cmdStr = arr[0].substring(1).toLowerCase(); //Parse command
-			
-			/* Ignore commands that start with a number */
-			if (cmdStr.matches("^[0-9]+.*$")) return;
+			String cmdStr = arr[0].substring(1).toLowerCase(); //Remove leading '$'
 			
 			/* Log command */
 			Aradiabot.getLogger().info(user.getNick() + " issued command: " + cmdStr);
@@ -82,16 +78,16 @@ public class CommandListener<T extends IRCBot> extends ListenerBase<T> {
 					/* Split the String by quotes and spaces.
 					 * ie: this "is an" example
 					 * would be args = {this, is an, example} */
-					Matcher matcher = Pattern.compile("([^\"]\\S*|\".+?\")\\s*$").matcher(arr[1]);
+					Matcher matcher = Pattern.compile("([^\"]\\S*|\".+?\")\\s*").matcher(arr[1]);
 					while (matcher.find()) {
 						args.add(matcher.group().replaceAll("\"", "").trim());
 					}
-
+					
 					/* Dispatch a new CommandEvent with our parsed arguments */
 					Utils.dispatchEvent(event.getBot(), new CommandEvent<T>(event, user, channel, command, args.toArray(new String[args.size()])));
 				}
 			} else { //Tell the user the command was invalid.
-				event.respond(Colors.RED + Colors.BOLD + "\"" + cmdStr + "\" is not a valid command. Use " + IRC.COMMAND_CHARACTER + "commands for a list of all available commands.");
+				channel.send().message(Colors.RED + Colors.BOLD + "'" + cmdStr + "' is not a valid command. Use $commands for a list of all available commands.");
 			}
 		}
 	}

@@ -31,6 +31,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.FileAppender;
 import sh.yle.k.ircbot.configuration.FlatFileConfiguration;
+import sh.yle.k.ircbot.example.ExamplePlugin;
 
 /**
  * Main class used to start the entire IRC bot.
@@ -67,8 +68,11 @@ public class Main {
 			System.exit(IRC.EXIT_FAILURE);
 		}
 		
+		/* Check Debugging */
+		Aradiabot.DEBUG = Boolean.parseBoolean(config.get("debug"));
+		
 		/* Set Logging Level */
-		log.setLevel(Boolean.parseBoolean(config.get("debug")) ? Level.DEBUG : Level.INFO);
+		log.setLevel(Aradiabot.DEBUG ? Level.DEBUG : Level.INFO);
 		
 		/* Set Configuration for bot */
 		Configuration<IRCBot> bConfig = new Configuration.Builder<IRCBot>()
@@ -86,9 +90,11 @@ public class Main {
 		
 		/* Create and start the new bot */
 		IRCBot bot = new IRCBot(bConfig);
-		bot.debug(Boolean.parseBoolean(config.get("debug")));
-		Aradiabot.setBot(bot); //Save singleton bot
-		
+
+		/* == START PLUGINS == */
+		bot.addPlugin(new ExamplePlugin());
+		/* === END PLUGINS === */
+
 		try {
 			bot.startBot();
 		} catch (IOException e) { //Connection error

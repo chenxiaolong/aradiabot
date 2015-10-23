@@ -16,18 +16,17 @@
  **/
 package sh.yle.k.ircbot.plugin;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-
-import sh.yle.k.ircbot.IRCBot;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * A slightly modified ArrayList that includes methods to
- * help improve IRCPlugin storage.
+ * A slightly modified CopyOnWriteArrayList that includes methods to
+ * help improve IRCPlugin storage. We need to use CopyOnWriteArrayList
+ * in order to avoid concurrency issues.
  * 
  * @author Kyle Colantonio <kyle10468@gmail.com>
  **/
-public class PluginList extends ArrayList<IRCPlugin<IRCBot>> {
+public class PluginList extends CopyOnWriteArrayList<IRCPlugin> {
 	private static final long serialVersionUID = 2541945757774840550L;
 
 	/**
@@ -36,9 +35,9 @@ public class PluginList extends ArrayList<IRCPlugin<IRCBot>> {
 	 * 
 	 * Returns null if a plugin is not found.
 	 **/
-	public IRCPlugin<IRCBot> find(String plugin) {
+	public IRCPlugin find(String plugin) {
 		/* Search commands */
-		for (IRCPlugin<IRCBot> pl : this) {
+		for (IRCPlugin pl : this) {
 			if (pl.getName().equals(plugin)) {
 				return pl;
 			}
@@ -51,9 +50,9 @@ public class PluginList extends ArrayList<IRCPlugin<IRCBot>> {
 	 * compare IRCPlugin names so they are sorted alphabetically.
 	 **/
 	public void sort() {
-		this.sort(new Comparator<IRCPlugin<IRCBot>>() {
+		this.sort(new Comparator<IRCPlugin>() {
 			@Override
-			public int compare(IRCPlugin<IRCBot> pl1, IRCPlugin<IRCBot> pl2) {
+			public int compare(IRCPlugin pl1, IRCPlugin pl2) {
 				return pl1.getName().compareTo(pl2.getName());
 			}
 		});

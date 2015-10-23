@@ -45,7 +45,7 @@ import sh.yle.k.ircbot.hooks.ListenerBase;
  * 
  * @author Kyle Colantonio <kyle10468@gmail.com>
  **/
-public abstract class IRCPlugin<T extends IRCBot> extends ListenerBase<T> {
+public abstract class IRCPlugin extends ListenerBase<IRCBot> {
 	private final String name, version, author, description;
 	private final CommandList commands = new CommandList();
 	private final File dataDirectory;
@@ -74,9 +74,8 @@ public abstract class IRCPlugin<T extends IRCBot> extends ListenerBase<T> {
 	 * likely be fatal and terminate the program.
 	 **/
 	private void initPlugin() {
-		/* Clear context so we can use our own */
+		/* Load a new Context from our Original */
 		LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-		context.reset();
 		
 		/* Set the pattern of the log output */
 		PatternLayoutEncoder encoder = new PatternLayoutEncoder();
@@ -102,7 +101,7 @@ public abstract class IRCPlugin<T extends IRCBot> extends ListenerBase<T> {
 		/* Update Plugin Logger */
 		log.addAppender(console);
 		log.addAppender(file);
-		log.setLevel(Aradiabot.isDebugging() ? Level.DEBUG : Level.INFO);
+		log.setLevel(Aradiabot.DEBUG ? Level.DEBUG : Level.INFO);
 		log.setAdditive(false);
 
 		/* Attempt to enable the plugin by calling onEnable().
@@ -155,7 +154,7 @@ public abstract class IRCPlugin<T extends IRCBot> extends ListenerBase<T> {
 	 * will terminate to prevent collision.
 	 **/
 	public final void addCommand(Command command) {
-		Validate.isTrue(Aradiabot.getCommands().contains(command), "'%s' already exists in the CommandList", command.getName());
+		Validate.isTrue(!Aradiabot.getCommands().contains(command), "'%s' already exists in the CommandList", command.getName());
 		Aradiabot.getCommands().add(command);
 		commands.add(command);
 	}
@@ -166,7 +165,7 @@ public abstract class IRCPlugin<T extends IRCBot> extends ListenerBase<T> {
 	 * will terminate.
 	 **/
 	public final void removeCommand(Command command) {
-		Validate.isTrue(!Aradiabot.getCommands().contains(command), "'%s' does not exist in the CommandList", command.getName());
+		Validate.isTrue(Aradiabot.getCommands().contains(command), "'%s' does not exist in the CommandList", command.getName());
 		Aradiabot.getCommands().remove(command);
 		commands.remove(command);
 	}

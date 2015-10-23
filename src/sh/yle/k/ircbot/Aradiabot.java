@@ -22,6 +22,7 @@ import org.pircbotx.Channel;
 import org.pircbotx.User;
 import ch.qos.logback.classic.Logger;
 import sh.yle.k.ircbot.command.CommandList;
+import sh.yle.k.ircbot.plugin.PluginList;
 
 /**
  * Aradiabot singleteon used to control the main IRCBot
@@ -33,6 +34,7 @@ public final class Aradiabot {
 	public static final String NAME = "Aradiabot";
 	public static final String VERSION = "1.0.0";
 	public static final String API_VERSION = "2.0.1";
+	public static boolean DEBUG = false;
 	private static IRCBot bot;
 	
 	public static final void setBot(IRCBot ircbot) {
@@ -41,7 +43,7 @@ public final class Aradiabot {
 		}
 		bot = ircbot;
 		bot.getLogger().info("This bot is running " + NAME + " version " + VERSION + " (PircBotX API version " + API_VERSION + ")");
-		if (bot.isDebugging()) {
+		if (DEBUG) {
 			bot.getLogger().debug("Debugging has been enabled!");
 		}
 	}
@@ -82,12 +84,8 @@ public final class Aradiabot {
 		return bot.getCommands();
 	}
 	
-	public static final boolean isDebugging() {
-		return bot.isDebugging();
-	}
-	
-	public static final void debug(boolean value) {
-		bot.debug(value);
+	public static final PluginList getPlugins() {
+		return bot.getPlugins();
 	}
 
 	public synchronized void sendToTarget(String target, String message, IRC.Event type) {
