@@ -42,3 +42,7 @@ gradle-app.setting
 
 # Cache of project
 .gradletasknamecache
+
+# Configs and logs
+CONFIG.ini
+log.log
